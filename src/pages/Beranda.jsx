@@ -24,11 +24,6 @@ export default function Beranda() {
 
         <div className={styles.heroInner}>
           <div className={styles.heroContent}>
-            <div className={styles.heroBadge}>
-              <Zap size={14} />
-              <span>Program Latihan #1 di Indonesia</span>
-            </div>
-
             <h1 className={styles.heroTitle}>
               Latihan
               <span className={styles.heroTitleAccent}> Rumahan</span>
