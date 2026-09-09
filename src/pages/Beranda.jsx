@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Dumbbell, Heart, Activity, ArrowRight, CheckCircle, Users, Trophy, Zap } from 'lucide-react';
 import CategoryCard from '../components/CategoryCard';
+import HeroScene from '../components/HeroScene';
 import workouts from '../data/workouts';
 import styles from './Beranda.module.css';
 
@@ -79,6 +80,7 @@ export default function Beranda() {
 
           {/* Hero visual */}
           <div className={styles.heroVisual}>
+            <HeroScene />
             <div className={styles.visualCard} style={{ '--delay': '0s' }}>
               <div className={styles.visualCardIcon}>🔥</div>
               <div className={styles.visualCardText}>
