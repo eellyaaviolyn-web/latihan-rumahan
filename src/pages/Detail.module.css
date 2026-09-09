@@ -1,0 +1,195 @@
+.page {
+  max-width: 1200px;
+  margin: auto;
+  padding: 30px 20px;
+  box-sizing: border-box;
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-secondary, #9ca3af);
+  margin-bottom: 25px;
+  transition: color 0.3s;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.backLink:hover {
+  color: var(--accent, #ff6b35);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: 30px;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.emojiDisplay {
+  font-size: 5rem;
+  text-align: center;
+  padding: 30px;
+  background: var(--bg-card, #1a1a2e);
+  border-radius: var(--radius, 12px);
+  border: 1px solid var(--border, #2e303a);
+}
+
+.nama {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: var(--text-primary, #ffffff);
+}
+
+.badge {
+  display: inline-block;
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.badgePemula {
+  background: rgba(76, 175, 80, 0.2);
+  color: #4caf50;
+}
+
+.badgeMenengah {
+  background: rgba(255, 193, 7, 0.2);
+  color: #ffc107;
+}
+
+.badgeLanjutan {
+  background: rgba(244, 67, 54, 0.2);
+  color: #f44336;
+}
+
+.infoRow {
+  display: flex;
+  gap: 25px;
+  color: var(--text-secondary, #9ca3af);
+  flex-wrap: wrap;
+}
+
+.infoItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.infoItem svg {
+  color: var(--accent, #ff6b35);
+  width: 18px;
+  height: 18px;
+}
+
+.deskripsi {
+  color: var(--text-secondary, #9ca3af);
+  line-height: 1.7;
+  margin: 0;
+}
+
+.sectionTitle {
+  font-size: 1.3rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: var(--text-primary, #ffffff);
+}
+
+.sectionTitle svg {
+  color: var(--accent, #ff6b35);
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.step {
+  display: flex;
+  gap: 15px;
+  padding: 15px;
+  background: var(--bg-card, #1a1a2e);
+  border-radius: 8px;
+  border: 1px solid var(--border, #2e303a);
+}
+
+.stepNumber {
+  width: 35px;
+  height: 35px;
+  background: var(--accent, #ff6b35);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  flex-shrink: 0;
+  color: #ffffff;
+}
+
+.stepText {
+  color: var(--text-secondary, #9ca3af);
+  line-height: 1.5;
+  display: flex;
+  align-items: center;
+}
+
+.ototTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.ototTag {
+  padding: 8px 16px;
+  background: var(--bg-card, #1a1a2e);
+  border: 1px solid var(--border, #2e303a);
+  border-radius: 20px;
+  font-size: 0.9rem;
+  color: var(--text-secondary, #9ca3af);
+}
+
+.sidebar {
+  position: sticky;
+  top: 90px;
+  align-self: start;
+}
+
+.notFound {
+  text-align: center;
+  padding: 100px 20px;
+}
+
+.notFound h2 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  color: var(--text-primary, #ffffff);
+}
+
+.notFound p {
+  color: var(--text-secondary, #9ca3af);
+  margin-bottom: 25px;
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: static;
+  }
+}

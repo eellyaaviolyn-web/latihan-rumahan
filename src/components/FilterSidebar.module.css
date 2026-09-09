@@ -1,0 +1,87 @@
+.sidebar {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 25px;
+  border: 1px solid var(--border);
+  position: sticky;
+  top: 90px;
+}
+
+.title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-top: 0;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.title svg {
+  color: var(--accent);
+}
+
+.group {
+  margin-bottom: 25px;
+}
+
+.group:last-child {
+  margin-bottom: 0;
+}
+
+.groupTitle {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.filterBtn {
+  padding: 10px 15px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 0.9rem;
+  text-align: left;
+  font-family: inherit;
+}
+
+.filterBtn:hover {
+  border-color: var(--accent);
+  color: var(--text-primary);
+}
+
+.filterBtnActive {
+  background: rgba(255, 107, 53, 0.15);
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: static;
+    margin-bottom: 20px;
+  }
+
+  .buttons {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .filterBtn {
+    flex: 1;
+    min-width: fit-content;
+    text-align: center;
+  }
+}
