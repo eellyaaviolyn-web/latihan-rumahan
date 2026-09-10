@@ -1,56 +1,66 @@
 import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { Menu, X, Zap } from 'lucide-react';
+import { Flame, Menu, X } from 'lucide-react';
 import styles from './Navbar.module.css';
 
-const Navbar = () => {
+const LINKS = [
+  { to: '/program', label: 'Program'    },
+  { to: '/jadwal',  label: 'Jadwal'     },
+  { to: '/tentang', label: 'Instruktur' },
+  { to: '/',        label: 'Komunitas'  },
+  { to: '/',        label: 'Harga'      },
+];
+
+export default function Navbar() {
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
 
   return (
-    <nav className={styles.navbar}>
+    <nav className={styles.nav}>
       <div className={styles.inner}>
+
         {/* Logo */}
         <Link to="/" className={styles.logo} onClick={close}>
-          <span className={styles.logoMark}>🏋️</span>
-          <span className={styles.logoFit}>FitLife</span>
-          <span className={styles.logoId}>Indonesia</span>
+          <span className={styles.flameWrap}>
+            <Flame size={18} className={styles.flameIcon} />
+          </span>
+          <span className={styles.logoTxt}>FitLife</span>
+          <span className={styles.logoSub}>Indonesia</span>
         </Link>
 
-        {/* hamburger */}
-        <button className={styles.burger} onClick={() => setOpen(p => !p)}
-          aria-label={open ? 'Tutup menu' : 'Buka menu'} type="button">
-          {open ? <X size={20} /> : <Menu size={20} />}
-        </button>
-
-        {/* Nav links */}
+        {/* Center Links */}
         <ul className={`${styles.links} ${open ? styles.linksOpen : ''}`}>
-          {[
-            { to: '/',        label: 'Beranda',        end: true },
-            { to: '/program', label: 'Program Latihan' },
-            { to: '/jadwal',  label: 'Jadwal' },
-            { to: '/tentang', label: 'Tentang Kami' },
-          ].map(({ to, label, end }) => (
-            <li key={to}>
-              <NavLink to={to} end={end} onClick={close}
+          {LINKS.map(({ to, label }) => (
+            <li key={label}>
+              <NavLink to={to}
                 className={({ isActive }) =>
-                  isActive ? `${styles.link} ${styles.linkActive}` : styles.link
-                }>
+                  isActive && to !== '/'
+                    ? `${styles.link} ${styles.linkActive}`
+                    : styles.link
+                }
+                onClick={close} end={to === '/'}>
                 {label}
               </NavLink>
             </li>
           ))}
-
-          {/* CTA */}
-          <li>
-            <Link to="/program" className={styles.ctaBtn} onClick={close}>
-              <Zap size={13} /> Mulai Latihan
-            </Link>
-          </li>
         </ul>
+
+        {/* Right Actions */}
+        <div className={styles.actions}>
+          <Link to="/" className={styles.loginBtn} onClick={close}>Login</Link>
+          <Link to="/program" className={styles.startBtn} onClick={close}>
+            Mulai Gratis →
+          </Link>
+        </div>
+
+        {/* Hamburger */}
+        <button className={styles.burger} type="button"
+          onClick={() => setOpen(p => !p)}
+          aria-label={open ? 'Tutup menu' : 'Buka menu'}>
+          {open ? <X size={20} /> : <Menu size={20} />}
+        </button>
+
       </div>
     </nav>
   );
-};
-
-export default Navbar;
+}

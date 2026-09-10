@@ -1,236 +1,382 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  Dumbbell, Heart, Activity, ArrowRight,
-  Star, Users, Zap, Flame, Clock, TrendingUp, Shield
+  ArrowRight, Star, Play, Brain, Dumbbell,
+  Users, Flame, Heart, Zap, Target, Award, Activity
 } from 'lucide-react';
-import CategoryCard from '../components/CategoryCard';
-import workouts from '../data/workouts';
 import styles from './Beranda.module.css';
 
-/* Tiny SVG progress ring */
-function Ring({ pct = 75, color = '#FF5E36', size = 44, stroke = 3 }) {
-  const r = (size - stroke * 2) / 2;
+/* ─── 3D Tilt hook ─── */
+function useTilt(deg = 9) {
+  const onMouseMove = useCallback((e) => {
+    const el = e.currentTarget;
+    const { left, top, width, height } = el.getBoundingClientRect();
+    const x = (e.clientX - left) / width  - 0.5;
+    const y = (e.clientY - top)  / height - 0.5;
+    el.style.transition = 'transform 0.06s ease';
+    el.style.transform  = `perspective(900px) rotateX(${y * -deg}deg) rotateY(${x * deg}deg) scale3d(1.02,1.02,1.02)`;
+  }, [deg]);
+  const onMouseLeave = useCallback((e) => {
+    e.currentTarget.style.transition = 'transform 0.5s ease';
+    e.currentTarget.style.transform  = '';
+  }, []);
+  return { onMouseMove, onMouseLeave };
+}
+
+/* ─── SVG Progress Ring ─── */
+function Ring({ pct = 75, color = '#FF5500', size = 60, stroke = 5 }) {
+  const r    = (size - stroke * 2) / 2;
   const circ = 2 * Math.PI * r;
-  const offset = circ - (pct / 100) * circ;
   return (
-    <svg width={size} height={size} style={{ transform: 'rotate(-90deg)' }}>
-      <circle cx={size/2} cy={size/2} r={r} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth={stroke} />
-      <circle cx={size/2} cy={size/2} r={r} fill="none" stroke={color}
-        strokeWidth={stroke} strokeDasharray={circ} strokeDashoffset={offset}
-        strokeLinecap="round" style={{ transition: 'stroke-dashoffset 1s ease' }} />
+    <svg width={size} height={size} style={{ transform: 'rotate(-90deg)', flexShrink: 0 }}>
+      <circle cx={size/2} cy={size/2} r={r} fill="none"
+        stroke="rgba(255,255,255,0.06)" strokeWidth={stroke} />
+      <circle cx={size/2} cy={size/2} r={r} fill="none"
+        stroke={color} strokeWidth={stroke} strokeLinecap="round"
+        strokeDasharray={circ}
+        strokeDashoffset={circ - (pct / 100) * circ}
+        style={{ filter: `drop-shadow(0 0 7px ${color}90)`, transition: 'stroke-dashoffset 1.2s ease' }}
+      />
     </svg>
   );
 }
 
-export default function Beranda() {
-  const navigate = useNavigate();
-
+/* ─── Animated ECG Waveform ─── */
+function ECGWave() {
+  const d = 'M0,24 L55,24 L70,14 L85,24 L115,24 L119,30 L126,4 L133,42 L140,24 L162,24 L183,11 L204,24 L300,24';
   return (
-    <div className={styles.container}>
-
-      {/* ───── HERO ───── */}
-      <section className={styles.hero}>
-        {/* ambient layers */}
-        <div className={styles.heroBg}>
-          <div className={styles.glow1} />
-          <div className={styles.glow2} />
-          <div className={styles.gridLines} />
-        </div>
-
-        <div className={styles.heroInner}>
-          {/* LEFT */}
-          <div className={styles.heroContent}>
-
-            {/* social proof badge */}
-            <div className={styles.socialBadge}>
-              <span className={styles.socialStars}>
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} size={11} fill="#FBBF24" color="#FBBF24" />
-                ))}
-              </span>
-              <span><strong>10k+</strong> Pengguna Aktif</span>
-              <span className={styles.badgeDot} />
-              <span className={styles.liveTag}>GRATIS</span>
-            </div>
-
-            <h1 className={styles.heroTitle}>
-              Transformasi<br />
-              <span className={styles.heroAccent}>Tubuh</span> dari<br />
-              <span className={styles.heroGrad}>Rumah</span>
-            </h1>
-
-            <p className={styles.heroSubtitle}>
-              Program latihan terstruktur tanpa gym, tanpa peralatan mahal.
-              Mulai dari pemula sampai lanjutan — semua ada di sini, <em>gratis selamanya</em>.
-            </p>
-
-            {/* CTAs */}
-            <div className={styles.heroCtas}>
-              <button type="button" className={styles.btnPrimary} onClick={() => navigate('/program')}>
-                Mulai Latihan Gratis <ArrowRight size={17} />
-              </button>
-              <button type="button" className={styles.btnGhost} onClick={() => navigate('/jadwal')}>
-                Lihat Program
-              </button>
-            </div>
-
-            {/* trust strip */}
-            <div className={styles.trustStrip}>
-              <span className={styles.trustItem}><Shield size={13} /> Tanpa Registrasi</span>
-              <span className={styles.trustItem}><Zap size={13} /> Mulai Instan</span>
-              <span className={styles.trustItem}><TrendingUp size={13} /> Hasil Nyata</span>
-            </div>
-          </div>
-
-          {/* RIGHT — floating cards */}
-          <div className={styles.heroVisual}>
-
-            {/* main glass card */}
-            <div className={styles.mainCard}>
-              <div className={styles.mainCardHeader}>
-                <div>
-                  <div className={styles.mainCardLabel}>Latihan Hari Ini</div>
-                  <div className={styles.mainCardTitle}>Full Body HIIT</div>
-                </div>
-                <div className={styles.liveIndicator}>
-                  <span className={styles.liveDot} /> AKTIF
-                </div>
-              </div>
-
-              {/* workouts inside */}
-              {[
-                { emoji: '🔥', name: 'Burpee', kcal: 180, pct: 82, color: '#FF5E36' },
-                { emoji: '⚡', name: 'Mountain Climber', kcal: 160, pct: 66, color: '#22D3EE' },
-                { emoji: '💪', name: 'Push Up', kcal: 120, pct: 50, color: '#4ADE80' },
-              ].map((w) => (
-                <div key={w.name} className={styles.workoutRow}>
-                  <span className={styles.rowEmoji}>{w.emoji}</span>
-                  <div className={styles.rowInfo}>
-                    <span className={styles.rowName}>{w.name}</span>
-                    <span className={styles.rowSub}>
-                      <Flame size={11} /> {w.kcal} kkal
-                    </span>
-                  </div>
-                  <Ring pct={w.pct} color={w.color} size={42} stroke={3} />
-                </div>
-              ))}
-
-              <div className={styles.cardFooter}>
-                <Clock size={13} /> Durasi rata-rata <strong>18 menit</strong>
-              </div>
-            </div>
-
-            {/* floating metric chips */}
-            <div className={`${styles.chip} ${styles.chip1}`}>
-              <span className={styles.chipNum}>520</span>
-              <span className={styles.chipLbl}>kkal / sesi</span>
-            </div>
-
-            <div className={`${styles.chip} ${styles.chip2}`}>
-              <span className={styles.chipNum}>3×</span>
-              <span className={styles.chipLbl}>Per Minggu</span>
-            </div>
-
-            {/* done toast */}
-            <div className={styles.doneToast}>
-              <span>✅</span>
-              <span>Sesi Selesai! +180 kkal terbakar</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ───── STATS BAR ───── */}
-      <div className={styles.statsBar}>
-        {[
-          { icon: <Dumbbell size={18} />, num: `${workouts.length}+`, lbl: 'Program Latihan' },
-          { icon: <Users size={18} />,    num: '10k+',  lbl: 'Pengguna Aktif' },
-          { icon: <Flame size={18} />,    num: '3',     lbl: 'Kategori' },
-          { icon: <Star size={18} />,     num: '4.9',   lbl: 'Rating Pengguna' },
-        ].map((s, i) => (
-          <React.Fragment key={s.lbl}>
-            {i > 0 && <div className={styles.statsDivider} />}
-            <div className={styles.statItem}>
-              <span className={styles.statIcon}>{s.icon}</span>
-              <span className={styles.statNum}>{s.num}</span>
-              <span className={styles.statLbl}>{s.lbl}</span>
-            </div>
-          </React.Fragment>
+    <div className={styles.ecgOuter}>
+      <div className={styles.ecgTrack}>
+        {[0, 1].map(i => (
+          <svg key={i} viewBox="0 0 300 48" className={styles.ecgSvg} preserveAspectRatio="none">
+            <path d={d} fill="none" stroke="#4ADE80" strokeWidth="1.8"
+              strokeLinecap="round" strokeLinejoin="round"
+              style={{ filter: 'drop-shadow(0 0 3px #4ADE80)' }} />
+          </svg>
         ))}
       </div>
+    </div>
+  );
+}
 
-      {/* ───── KATEGORI ───── */}
-      <section className={styles.section}>
-        <div className={styles.sectionHead}>
-          <span className={styles.eyebrow}>Pilih Sesuai Tujuanmu</span>
-          <h2 className={styles.sectionTitle}>Kategori Latihan</h2>
-          <p className={styles.sectionDesc}>
-            Dari membakar kalori hingga membangun otot — semua tersedia tanpa alat apapun.
+/* ─── Animated Burn Bars ─── */
+function PulseBars() {
+  const heights = [38, 65, 42, 80, 52, 72, 46, 88, 60, 76, 50, 68];
+  return (
+    <div className={styles.pulseBars}>
+      {heights.map((h, i) => (
+        <div key={i} className={styles.pulseBar}
+          style={{ height: `${h}%`, animationDelay: `${i * 0.12}s` }} />
+      ))}
+    </div>
+  );
+}
+
+/* ─── Main Component ─── */
+export default function Beranda() {
+  const navigate = useNavigate();
+  const tilt = useTilt(8);
+
+  const handleTilt = tilt.onMouseMove;
+  const resetTilt  = tilt.onMouseLeave;
+
+  return (
+    <div className={styles.page}>
+
+      {/* ════════════════ HERO ════════════════ */}
+      <section className={styles.hero}>
+        {/* Ambient glow layers */}
+        <div className={styles.ambOrange} />
+        <div className={styles.ambTeal}   />
+        <div className={styles.gridBg}    />
+
+        <div className={styles.heroGrid}>
+
+          {/* ── LEFT ── */}
+          <div className={styles.heroLeft}>
+
+            {/* Top Badge */}
+            <div className={styles.topBadge}>
+              <span>🔥</span>
+              <span>#1 Platform Fitness Rumahan di Indonesia</span>
+              <span className={styles.badgeStarRow}>
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} size={10} fill="#FBBF24" color="#FBBF24" />
+                ))}
+              </span>
+            </div>
+
+            {/* Headline */}
+            <h1 className={styles.headline}>
+              Bentuk Tubuh<br />
+              Impian dari Rumah.<br />
+              <span className={styles.headlineGrad}>Tanpa&nbsp;Alat,<br />Hasil&nbsp;Maksimal.</span>
+            </h1>
+
+            {/* Sub */}
+            <p className={styles.sub}>
+              Akses <strong>500+ program latihan</strong> HD terstruktur yang disesuaikan
+              dengan tingkat kebugaranmu. Cukup <strong>15–30 menit sehari</strong>.
+            </p>
+
+            {/* CTA Group */}
+            <div className={styles.ctaRow}>
+              <button type="button" className={styles.ctaPrimary}
+                onClick={() => navigate('/program')}>
+                Coba Gratis 14 Hari <ArrowRight size={17} />
+              </button>
+              <button type="button" className={styles.ctaGhost}
+                onClick={() => navigate('/program')}>
+                <span className={styles.playDot}><Play size={12} fill="white" /></span>
+                Lihat Demo Video
+              </button>
+            </div>
+
+            {/* Social Proof */}
+            <div className={styles.proof}>
+              <div className={styles.avatars}>
+                {['#FF5500', '#818CF8', '#4ADE80', '#22D3EE', '#FBBF24'].map((c, i) => (
+                  <span key={i} className={styles.av}
+                    style={{ background: c, zIndex: 5 - i }}>
+                    {['R', 'S', 'D', 'A', 'F'][i]}
+                  </span>
+                ))}
+              </div>
+              <div className={styles.proofText}>
+                <span><strong>50.000+</strong> pengguna di Indonesia</span>
+                <span className={styles.rating}>
+                  {[...Array(5)].map((_, i) => <Star key={i} size={11} fill="#FBBF24" color="#FBBF24" />)}
+                  <strong>4.9</strong><span>/5.0</span>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* ── RIGHT — Visual Showcase ── */}
+          <div className={styles.heroRight}>
+            <div className={styles.centerGlow} />
+            <div className={styles.orbitRing1} />
+            <div className={styles.orbitRing2} />
+
+            {/* Athlete centerpiece */}
+            <div className={styles.athleteBubble}>
+              <span className={styles.athleteEmoji}>🏃‍♂️</span>
+            </div>
+
+            {/* Card: Burn Rate (top-left) */}
+            <div className={`${styles.fCard} ${styles.fCardBurn}`}>
+              <div className={styles.fHeader}>
+                <Flame size={13} color="#FF5500" />
+                <span className={styles.fLabel}>Burn Rate</span>
+                <span className={styles.livePill}>LIVE</span>
+              </div>
+              <div className={styles.fBig}>320 <sub>Kcal</sub></div>
+              <PulseBars />
+            </div>
+
+            {/* Card: Program (top-right) */}
+            <div className={`${styles.fCard} ${styles.fCardProg}`}>
+              <div className={styles.fHeader}>
+                <Zap size={13} color="#818CF8" />
+                <span className={styles.fLabel}>Program Hari Ini</span>
+              </div>
+              <div className={styles.progName}>HIIT Fat Burn</div>
+              <div className={styles.ringRow}>
+                <Ring pct={75} color="#818CF8" size={54} stroke={4} />
+                <div>
+                  <div className={styles.ringPct} style={{ color: '#818CF8' }}>75%</div>
+                  <div className={styles.ringLbl}>Selesai</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Card: Heart Rate (bottom) */}
+            <div className={`${styles.fCard} ${styles.fCardHR}`}>
+              <div className={styles.fHeader}>
+                <Heart size={13} color="#4ADE80" />
+                <span className={styles.fLabel}>Heart Rate</span>
+                <span className={styles.zonePill}>ZONA AKTIF</span>
+              </div>
+              <div className={styles.hrRow}>
+                <span className={styles.fBig} style={{ fontSize: '1.5rem' }}>145 <sub>BPM</sub></span>
+              </div>
+              <ECGWave />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ════════════════ BENTO GRID ════════════════ */}
+      <section className={styles.bento}>
+        <div className={styles.bentoHead}>
+          <span className={styles.eyebrow}>Fitur Unggulan</span>
+          <h2 className={styles.bentoTitle}>
+            Semua yang Kamu Butuhkan,<br />Dalam Satu Platform
+          </h2>
+          <p className={styles.bentoSub}>
+            Dirancang untuk hasil nyata — dari AI trainer hingga pelacak kalori pintar.
           </p>
         </div>
-        <div className={styles.kategoriGrid}>
-          <CategoryCard icon={Heart}    title="Kardio"        color="#FF5E36"
-            description="Bakar kalori maksimal dengan HIIT & Jumping Jacks. Tingkatkan stamina dan daya tahan kardiovaskular."
-            onClick={() => navigate('/program?kategori=Kardio')} />
-          <CategoryCard icon={Dumbbell} title="Kekuatan"      color="#818CF8"
-            description="Bangun otot dengan Push Up, Squat & Plank. Gunakan berat badan sendiri sebagai beban efektif."
-            onClick={() => navigate('/program?kategori=Kekuatan')} />
-          <CategoryCard icon={Activity} title="Fleksibilitas" color="#22D3EE"
-            description="Tingkatkan kelenturan dengan yoga & peregangan. Kurangi risiko cedera dan perbaiki postur tubuh."
-            onClick={() => navigate('/program?kategori=Fleksibilitas')} />
-        </div>
-      </section>
 
-      {/* ───── KENAPA ───── */}
-      <section className={styles.whySection}>
-        <div className={styles.whyInner}>
-          <div className={styles.whyLeft}>
-            <span className={styles.eyebrow}>Kenapa FitLife?</span>
-            <h2 className={styles.whyTitle}>Semua yang Kamu<br />Butuhkan, Gratis</h2>
-            <p className={styles.whyDesc}>
-              Tidak perlu gym. Tidak perlu alat. Hanya butuh tekad dan panduan yang tepat —
-              dan kami menyediakannya 100% gratis.
-            </p>
-            <button type="button" className={styles.btnPrimary} onClick={() => navigate('/program')}>
-              Coba Sekarang <ArrowRight size={16} />
-            </button>
+        <div className={styles.bentoGrid}>
+
+          {/* ── Card 1: AI Trainer (Large, 2 cols) ── */}
+          <div className={`${styles.bc} ${styles.bc1}`}
+            onMouseMove={handleTilt} onMouseLeave={resetTilt}>
+            <div className={styles.bcBadge} style={{ color: '#818CF8' }}>
+              <Brain size={13} /> AI Personal Trainer
+            </div>
+            <h3 className={styles.bcTitle}>Pelatih AI yang<br />Selalu Ada Untukmu</h3>
+
+            <div className={styles.chatWrap}>
+              {[
+                { role: 'ai',   text: 'Halo! Hari ini fokus **Upper Body**. Mulai dengan Push Up 3×12 💪' },
+                { role: 'user', text: 'Bisa tambahin latihan core?' },
+                { role: 'ai',   text: 'Tentu! **Plank 3×30 detik** setelah Push Up. Let\'s go 🔥' },
+              ].map((m, i) => (
+                <div key={i} className={`${styles.msg} ${m.role === 'user' ? styles.msgUser : ''}`}>
+                  {m.role === 'ai' && <span className={styles.aiAv}>🤖</span>}
+                  <div className={`${styles.bubble} ${m.role === 'user' ? styles.bubbleUser : ''}`}
+                    dangerouslySetInnerHTML={{
+                      __html: m.text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                    }} />
+                </div>
+              ))}
+            </div>
+
+            <div className={styles.pills}>
+              {['Push Up 3×12', 'Plank 3×30s', 'Tricep Dip 3×10'].map(p => (
+                <span key={p} className={styles.pill}>{p}</span>
+              ))}
+            </div>
           </div>
 
-          <div className={styles.whyGrid}>
-            {[
-              { emoji: '🏠', color: '#FF5E36', title: 'Tanpa Peralatan',   desc: 'Cukup berat badan sendiri — nol investasi alat.' },
-              { emoji: '⏰', color: '#818CF8', title: 'Bebas Waktu',        desc: 'Pagi, siang, malam — latihan kapan pun kamu mau.' },
-              { emoji: '💰', color: '#22D3EE', title: '100% Gratis',        desc: 'Semua program & jadwal bisa diakses tanpa biaya.' },
-              { emoji: '📈', color: '#4ADE80', title: 'Progresif',           desc: 'Program yang berkembang mengikuti kemampuanmu.' },
-            ].map((item) => (
-              <div key={item.title} className={styles.whyCard}
-                   style={{ '--card-color': item.color }}>
-                <div className={styles.whyIcon}>{item.emoji}</div>
-                <div className={styles.whyCardTitle}>{item.title}</div>
-                <div className={styles.whyCardDesc}>{item.desc}</div>
+          {/* ── Card 2: Tanpa Alat ── */}
+          <div className={`${styles.bc} ${styles.bc2}`}
+            onMouseMove={handleTilt} onMouseLeave={resetTilt}>
+            <div className={styles.bcBadge} style={{ color: '#FF5500' }}>
+              <Dumbbell size={13} /> Tanpa Peralatan
+            </div>
+            <h3 className={styles.bcTitle}>Efektif di<br />Ruang Sempit</h3>
+
+            <div className={styles.exGrid}>
+              {[
+                { e: '💪', n: 'Push Up' },
+                { e: '🦵', n: 'Squat' },
+                { e: '🧘', n: 'Plank' },
+                { e: '🔥', n: 'Burpee' },
+              ].map(({ e, n }) => (
+                <div key={n} className={styles.exCard}>
+                  <span className={styles.exEm}>{e}</span>
+                  <span className={styles.exNm}>{n}</span>
+                </div>
+              ))}
+            </div>
+
+            <div className={styles.greenBadge}>✓ 0 Peralatan Diperlukan</div>
+          </div>
+
+          {/* ── Card 3: Komunitas ── */}
+          <div className={`${styles.bc} ${styles.bc3}`}
+            onMouseMove={handleTilt} onMouseLeave={resetTilt}>
+            <div className={styles.bcBadge} style={{ color: '#22D3EE' }}>
+              <Users size={13} /> Komunitas
+            </div>
+            <h3 className={styles.bcTitle}>Leaderboard<br />Harian</h3>
+
+            <div className={styles.lb}>
+              {[
+                { rank: 1, name: 'Sarah A.',  pts: 2840, color: '#FBBF24' },
+                { rank: 2, name: 'Rizki B.',  pts: 2720, color: '#94A3B8' },
+                { rank: 3, name: 'Kamu',      pts: 2650, color: '#FF5500', me: true },
+              ].map(u => (
+                <div key={u.rank} className={`${styles.lbRow} ${u.me ? styles.lbMe : ''}`}>
+                  <span className={styles.lbRk} style={{ color: u.color }}>#{u.rank}</span>
+                  <span className={styles.lbNm}>{u.name}</span>
+                  <span className={styles.lbPt}>{u.pts.toLocaleString()} <small>pts</small></span>
+                </div>
+              ))}
+            </div>
+
+            <div className={styles.streakChip}>
+              <Award size={12} /> Streak 7 Hari 🔥
+            </div>
+          </div>
+
+          {/* ── Card 4: Kalori (2 cols) ── */}
+          <div className={`${styles.bc} ${styles.bc4}`}
+            onMouseMove={handleTilt} onMouseLeave={resetTilt}>
+            <div className={styles.bcBadge} style={{ color: '#4ADE80' }}>
+              <Target size={13} /> Pelacak Kalori Otomatis
+            </div>
+            <h3 className={styles.bcTitle}>Kalori Terbakar Hari Ini</h3>
+
+            <div className={styles.kcRow}>
+              {/* Ring */}
+              <div className={styles.kcRingWrap}>
+                <Ring pct={68} color="#4ADE80" size={110} stroke={7} />
+                <div className={styles.kcCenter}>
+                  <span className={styles.kcNum}>1.240</span>
+                  <span className={styles.kcUnit}>kkal</span>
+                </div>
               </div>
-            ))}
+
+              {/* Stats */}
+              <div className={styles.kcStats}>
+                {[
+                  { label: 'Target Harian',  val: '1.800 kkal', c: '#4ADE80' },
+                  { label: 'Kalori Tersisa', val: '560 kkal',   c: '#94A3B8' },
+                  { label: 'Sesi Latihan',   val: '3 sesi',     c: '#FF5500' },
+                  { label: 'Durasi Total',   val: '54 menit',   c: '#818CF8' },
+                ].map(s => (
+                  <div key={s.label} className={styles.kcStat}>
+                    <span className={styles.kcVal} style={{ color: s.c }}>{s.val}</span>
+                    <span className={styles.kcLbl}>{s.label}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Mini breakdown bars */}
+              <div className={styles.kcBars}>
+                {[
+                  { label: 'Kardio',     pct: 68, c: '#FF5500' },
+                  { label: 'Kekuatan',   pct: 45, c: '#818CF8' },
+                  { label: 'Peregangan', pct: 30, c: '#4ADE80' },
+                ].map(b => (
+                  <div key={b.label} className={styles.kcBarItem}>
+                    <span className={styles.kcBarLabel}>{b.label}</span>
+                    <div className={styles.kcBarTrack}>
+                      <div className={styles.kcBarFill}
+                        style={{ width: `${b.pct}%`, background: b.c }} />
+                    </div>
+                    <span className={styles.kcBarPct} style={{ color: b.c }}>{b.pct}%</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
+
         </div>
       </section>
 
-      {/* ───── CTA BANNER ───── */}
+      {/* ════════════════ CTA FOOTER ════════════════ */}
       <section className={styles.ctaBanner}>
         <div className={styles.bannerGlow} />
-        <div className={styles.bannerContent}>
-          <span className={styles.eyebrow} style={{ color: '#FF5E36' }}>Mulai Hari Ini</span>
-          <h2 className={styles.bannerTitle}>Siap Transformasi?</h2>
-          <p className={styles.bannerDesc}>
-            Bergabung bersama 10.000+ pengguna aktif yang sudah merasakan manfaatnya.
-            Gratis selamanya, mulai dalam 30 detik.
+        <div className={styles.bannerInner}>
+          <span className={styles.eyebrow}>Mulai Hari Ini</span>
+          <h2 className={styles.bannerTitle}>Siap untuk Transformasi?</h2>
+          <p className={styles.bannerSub}>
+            Bergabung bersama <strong>50.000+</strong> pengguna aktif.
+            Gratis selamanya — mulai dalam 30 detik.
           </p>
-          <div className={styles.bannerCtas}>
-            <button type="button" className={styles.btnPrimary} onClick={() => navigate('/program')}>
-              Lihat Semua Program <ArrowRight size={17} />
+          <div className={styles.bannerBtns}>
+            <button type="button" className={styles.ctaPrimary}
+              onClick={() => navigate('/program')}>
+              Coba Gratis 14 Hari <ArrowRight size={17} />
             </button>
-            <button type="button" className={styles.btnGhost} onClick={() => navigate('/jadwal')}>
-              Jadwal Mingguan
+            <button type="button" className={styles.ctaGhost}
+              onClick={() => navigate('/jadwal')}>
+              Lihat Jadwal Latihan
             </button>
           </div>
         </div>
