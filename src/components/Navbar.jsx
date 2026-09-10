@@ -66,8 +66,12 @@ export default function Navbar() {
           {user ? (
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#fff', fontSize: '0.9rem', fontWeight: 'bold' }}>
-                <div style={{ width: '34px', height: '34px', borderRadius: '50%', background: 'linear-gradient(135deg, #FF5500, #FF2A00)', display: 'flex', alignItems: 'center', justifyContent: 'center', textTransform: 'uppercase' }}>
-                  {user.name.charAt(0)}
+                <div style={{ width: '34px', height: '34px', borderRadius: '50%', background: 'linear-gradient(135deg, #FF5500, #FF2A00)', display: 'flex', alignItems: 'center', justifyContent: 'center', textTransform: 'uppercase', overflow: 'hidden' }}>
+                  {user.picture ? (
+                    <img src={user.picture} alt={user.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} referrerPolicy="no-referrer" />
+                  ) : (
+                    user.name.charAt(0)
+                  )}
                 </div>
                 {user.name}
               </div>

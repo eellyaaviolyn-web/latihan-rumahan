@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Flame, Mail, Lock, User, ArrowRight, Loader2 } from 'lucide-react';
+import { useGoogleLogin } from '@react-oauth/google';
 import styles from './Login.module.css'; // Menggunakan style yang sama dengan Login
 
 export default function Register() {
@@ -20,13 +21,33 @@ export default function Register() {
     }, 1500);
   };
 
+  const loginWithGoogle = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        const userInfo = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+          headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
+        }).then(res => res.json());
+
+        localStorage.setItem('fitlife_user', JSON.stringify({
+          name: userInfo.name,
+          email: userInfo.email,
+          picture: userInfo.picture
+        }));
+        window.location.href = '/program';
+      } catch (error) {
+        console.error("Gagal mengambil data dari Google", error);
+        setIsGoogleLoading(false);
+      }
+    },
+    onError: () => {
+      console.error("Login Google gagal");
+      setIsGoogleLoading(false);
+    }
+  });
+
   const handleGoogle = () => {
     setIsGoogleLoading(true);
-    setTimeout(() => {
-      setIsGoogleLoading(false);
-      localStorage.setItem('fitlife_user', JSON.stringify({ name: 'Google User', email: 'user@gmail.com' }));
-      window.location.href = '/program';
-    }, 1500);
+    loginWithGoogle();
   };
 
   return (
