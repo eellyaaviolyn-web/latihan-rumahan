@@ -47,7 +47,7 @@ export default function Navbar() {
 
         {/* Right Actions */}
         <div className={styles.actions}>
-          <Link to="/" className={styles.loginBtn} onClick={close}>Login</Link>
+          <Link to="/login" className={styles.loginBtn} onClick={close}>Login</Link>
           <Link to="/program" className={styles.startBtn} onClick={close}>
             Mulai Gratis →
           </Link>

@@ -6,6 +6,7 @@ import Program from './pages/Program'
 import Detail from './pages/Detail'
 import Jadwal from './pages/Jadwal'
 import Tentang from './pages/Tentang'
+import Login from './pages/Login'
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/detail/:id" element={<Detail />} />
           <Route path="/jadwal" element={<Jadwal />} />
           <Route path="/tentang" element={<Tentang />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </div>
       <Footer />
