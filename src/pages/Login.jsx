@@ -1,17 +1,32 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Flame, Mail, Lock, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Flame, Mail, Lock, ArrowRight, Loader2 } from 'lucide-react';
 import styles from './Login.module.css';
 
 export default function Login() {
-  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
 
   const handleLogin = (e) => {
     e.preventDefault();
-    // Simulasi login sukses, diarahkan ke halaman program
-    navigate('/program');
+    setIsLoading(true);
+    // Simulasi proses API ke server
+    setTimeout(() => {
+      setIsLoading(false);
+      localStorage.setItem('fitlife_user', JSON.stringify({ name: email.split('@')[0], email }));
+      window.location.href = '/program'; // Reload agar navbar membaca state login
+    }, 1500);
+  };
+
+  const handleGoogle = () => {
+    setIsGoogleLoading(true);
+    setTimeout(() => {
+      setIsGoogleLoading(false);
+      localStorage.setItem('fitlife_user', JSON.stringify({ name: 'Google User', email: 'user@gmail.com' }));
+      window.location.href = '/program';
+    }, 1500);
   };
 
   return (
@@ -30,9 +45,9 @@ export default function Login() {
         </div>
 
         <div className={styles.oauthGroup}>
-          <button type="button" className={styles.oauthBtn} onClick={() => navigate('/program')}>
-            <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" width={20} />
-            Lanjutkan dengan Google
+          <button type="button" className={`${styles.oauthBtn} ${isGoogleLoading ? styles.btnDisabled : ''}`} onClick={handleGoogle} disabled={isGoogleLoading}>
+            {isGoogleLoading ? <Loader2 size={20} className={styles.spin} /> : <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" width={20} />}
+            {isGoogleLoading ? 'Menghubungkan...' : 'Lanjutkan dengan Google'}
           </button>
         </div>
 
@@ -72,8 +87,9 @@ export default function Login() {
             </div>
           </div>
 
-          <button type="submit" className={styles.submitBtn}>
-            Masuk Sekarang <ArrowRight size={18} />
+          <button type="submit" className={`${styles.submitBtn} ${isLoading ? styles.btnDisabled : ''}`} disabled={isLoading}>
+            {isLoading ? <Loader2 size={18} className={styles.spin} /> : 'Masuk Sekarang'}
+            {!isLoading && <ArrowRight size={18} />}
           </button>
         </form>
 

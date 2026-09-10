@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Flame, Mail, ArrowRight } from 'lucide-react';
+import { Flame, Mail, ArrowRight, Loader2 } from 'lucide-react';
 import styles from './Login.module.css'; // Menggunakan style yang sama dengan Login
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');
   const [sent, setSent] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleReset = (e) => {
     e.preventDefault();
-    setSent(true);
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      setSent(true);
+    }, 2000);
   };
 
   return (
@@ -51,8 +56,9 @@ export default function ForgotPassword() {
               </div>
             </div>
 
-            <button type="submit" className={styles.submitBtn}>
-              Kirim Link Reset <ArrowRight size={18} />
+            <button type="submit" className={`${styles.submitBtn} ${isLoading ? styles.btnDisabled : ''}`} disabled={isLoading}>
+              {isLoading ? <Loader2 size={18} className={styles.spin} /> : 'Kirim Link Reset'}
+              {!isLoading && <ArrowRight size={18} />}
             </button>
           </form>
         )}

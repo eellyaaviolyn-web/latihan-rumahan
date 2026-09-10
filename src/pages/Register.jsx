@@ -1,18 +1,32 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Flame, Mail, Lock, User, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Flame, Mail, Lock, User, ArrowRight, Loader2 } from 'lucide-react';
 import styles from './Login.module.css'; // Menggunakan style yang sama dengan Login
 
 export default function Register() {
-  const navigate = useNavigate();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
 
   const handleRegister = (e) => {
     e.preventDefault();
-    // Simulasi sukses mendaftar
-    navigate('/program');
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      localStorage.setItem('fitlife_user', JSON.stringify({ name, email }));
+      window.location.href = '/program';
+    }, 1500);
+  };
+
+  const handleGoogle = () => {
+    setIsGoogleLoading(true);
+    setTimeout(() => {
+      setIsGoogleLoading(false);
+      localStorage.setItem('fitlife_user', JSON.stringify({ name: 'Google User', email: 'user@gmail.com' }));
+      window.location.href = '/program';
+    }, 1500);
   };
 
   return (
@@ -30,9 +44,9 @@ export default function Register() {
         </div>
 
         <div className={styles.oauthGroup}>
-          <button type="button" className={styles.oauthBtn} onClick={() => navigate('/program')}>
-            <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" width={20} />
-            Daftar dengan Google
+          <button type="button" className={`${styles.oauthBtn} ${isGoogleLoading ? styles.btnDisabled : ''}`} onClick={handleGoogle} disabled={isGoogleLoading}>
+            {isGoogleLoading ? <Loader2 size={20} className={styles.spin} /> : <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" width={20} />}
+            {isGoogleLoading ? 'Mendaftar...' : 'Daftar dengan Google'}
           </button>
         </div>
 
@@ -86,8 +100,9 @@ export default function Register() {
             </div>
           </div>
 
-          <button type="submit" className={styles.submitBtn}>
-            Daftar Sekarang <ArrowRight size={18} />
+          <button type="submit" className={`${styles.submitBtn} ${isLoading ? styles.btnDisabled : ''}`} disabled={isLoading}>
+            {isLoading ? <Loader2 size={18} className={styles.spin} /> : 'Daftar Sekarang'}
+            {!isLoading && <ArrowRight size={18} />}
           </button>
         </form>
 

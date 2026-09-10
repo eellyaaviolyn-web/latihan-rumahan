@@ -234,3 +234,16 @@
     padding: 30px 20px;
   }
 }
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+
+.btnDisabled {
+  opacity: 0.7;
+  pointer-events: none;
+}

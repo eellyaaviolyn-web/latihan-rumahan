@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
-import { Flame, Menu, X } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Flame, Menu, X, LogOut } from 'lucide-react';
 import styles from './Navbar.module.css';
 
 const LINKS = [
@@ -13,7 +13,23 @@ const LINKS = [
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
+
   const close = () => setOpen(false);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem('fitlife_user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('fitlife_user');
+    setUser(null);
+    window.location.href = '/';
+  };
 
   return (
     <nav className={styles.nav}>
@@ -47,10 +63,26 @@ export default function Navbar() {
 
         {/* Right Actions */}
         <div className={styles.actions}>
-          <Link to="/login" className={styles.loginBtn} onClick={close}>Login</Link>
-          <Link to="/program" className={styles.startBtn} onClick={close}>
-            Mulai Gratis →
-          </Link>
+          {user ? (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#fff', fontSize: '0.9rem', fontWeight: 'bold' }}>
+                <div style={{ width: '34px', height: '34px', borderRadius: '50%', background: 'linear-gradient(135deg, #FF5500, #FF2A00)', display: 'flex', alignItems: 'center', justifyContent: 'center', textTransform: 'uppercase' }}>
+                  {user.name.charAt(0)}
+                </div>
+                {user.name}
+              </div>
+              <button onClick={handleLogout} className={styles.loginBtn} style={{ background: 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <LogOut size={16} /> Keluar
+              </button>
+            </div>
+          ) : (
+            <>
+              <Link to="/login" className={styles.loginBtn} onClick={close}>Login</Link>
+              <Link to="/program" className={styles.startBtn} onClick={close}>
+                Mulai Gratis →
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Hamburger */}
