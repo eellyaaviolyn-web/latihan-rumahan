@@ -7,8 +7,8 @@ const LINKS = [
   { to: '/program', label: 'Program'    },
   { to: '/jadwal',  label: 'Jadwal'     },
   { to: '/tentang', label: 'Instruktur' },
-  { to: '/',        label: 'Komunitas'  },
-  { to: '/',        label: 'Harga'      },
+  { to: '/komunitas', label: 'Komunitas'  },
+  { to: '/harga',     label: 'Harga'      },
 ];
 
 export default function Navbar() {

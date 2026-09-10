@@ -7,6 +7,10 @@ import Detail from './pages/Detail'
 import Jadwal from './pages/Jadwal'
 import Tentang from './pages/Tentang'
 import Login from './pages/Login'
+import Register from './pages/Register'
+import ForgotPassword from './pages/ForgotPassword'
+import Harga from './pages/Harga'
+import Komunitas from './pages/Komunitas'
 
 function App() {
   return (
@@ -20,6 +24,10 @@ function App() {
           <Route path="/jadwal" element={<Jadwal />} />
           <Route path="/tentang" element={<Tentang />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/lupa-password" element={<ForgotPassword />} />
+          <Route path="/harga" element={<Harga />} />
+          <Route path="/komunitas" element={<Komunitas />} />
         </Routes>
       </div>
       <Footer />

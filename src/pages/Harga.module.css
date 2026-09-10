@@ -1,0 +1,150 @@
+.page {
+  padding: 120px 20px;
+  max-width: 900px;
+  margin: 0 auto;
+  min-height: 100vh;
+  text-align: center;
+}
+
+.header h2 {
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  margin-bottom: 12px;
+  color: #fff;
+  letter-spacing: -0.03em;
+}
+
+.header p {
+  color: #94A3B8;
+  margin-bottom: 60px;
+  font-size: 1.1rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  justify-content: center;
+  align-items: center;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  padding: 40px;
+  text-align: left;
+  position: relative;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  transition: transform 0.3s, border-color 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.proCard {
+  border-color: rgba(255, 85, 0, 0.4);
+  box-shadow: 0 24px 60px rgba(255, 85, 0, 0.12);
+  background: linear-gradient(180deg, rgba(255,85,0,0.05) 0%, rgba(255,255,255,0.02) 100%);
+  transform: scale(1.05);
+}
+
+.proCard:hover {
+  transform: scale(1.05) translateY(-5px);
+  border-color: rgba(255, 85, 0, 0.6);
+}
+
+.badge {
+  position: absolute;
+  top: -14px;
+  right: 30px;
+  background: linear-gradient(135deg, #FF5500, #FF2A00);
+  color: #fff;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  box-shadow: 0 4px 12px rgba(255, 85, 0, 0.4);
+}
+
+.card h3 {
+  font-size: 1.4rem;
+  color: #E2E8F0;
+  margin-bottom: 15px;
+}
+
+.price {
+  font-size: 2.8rem;
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 30px;
+  letter-spacing: -0.04em;
+}
+
+.price span {
+  font-size: 1.1rem;
+  color: #94A3B8;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.features {
+  list-style: none;
+  margin-bottom: 40px;
+  padding: 0;
+}
+
+.features li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #CBD5E1;
+  margin-bottom: 16px;
+  font-size: 0.98rem;
+}
+
+.btnGhost {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.btnGhost:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.btnPrimary {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #FF5500, #FF2A00);
+  border: none;
+  color: #fff;
+  font-weight: 800;
+  font-size: 1rem;
+  box-shadow: 0 8px 24px rgba(255, 85, 0, 0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btnPrimary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(255, 85, 0, 0.45);
+}
+
+@media (max-width: 768px) {
+  .proCard {
+    transform: scale(1);
+  }
+  .proCard:hover {
+    transform: translateY(-5px);
+  }
+}
