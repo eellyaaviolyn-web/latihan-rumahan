@@ -1,20 +1,36 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Flame, Mail, ArrowRight, Loader2, CheckCircle } from 'lucide-react';
+import { Flame, Mail, ArrowRight, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
+import { sendPasswordResetEmail } from 'firebase/auth';
+import { auth } from '../firebase';
 import styles from './ForgotPassword.module.css';
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');
   const [sent, setSent] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleReset = (e) => {
+  const handleReset = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
+    setError('');
+    
+    try {
+      await sendPasswordResetEmail(auth, email);
       setSent(true);
-    }, 2000);
+    } catch (err) {
+      console.error(err);
+      if (err.code === 'auth/user-not-found') {
+        setError('Email tidak ditemukan atau belum terdaftar.');
+      } else if (err.code === 'auth/invalid-email') {
+        setError('Format email tidak valid.');
+      } else {
+        setError('Terjadi kesalahan. Coba lagi nanti.');
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -38,6 +54,11 @@ export default function ForgotPassword() {
           </div>
         ) : (
           <form onSubmit={handleReset} className={styles.form}>
+            {error && (
+              <div style={{ padding: '10px', background: 'rgba(248,113,113,0.1)', color: '#F87171', borderRadius: '8px', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <AlertCircle size={16} /> {error}
+              </div>
+            )}
             <div className={styles.inputGroup}>
               <label>Email Terdaftar</label>
               <div className={styles.inputWrapper}>

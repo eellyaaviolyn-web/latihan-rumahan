@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Flame, Mail, Lock, User, ArrowRight, Loader2 } from 'lucide-react';
-import { useGoogleLogin } from '@react-oauth/google';
+import { Link, useNavigate } from 'react-router-dom';
+import { Flame, Mail, Lock, User, ArrowRight, Loader2, AlertCircle } from 'lucide-react';
+import { createUserWithEmailAndPassword, updateProfile, signInWithPopup } from 'firebase/auth';
+import { auth, googleProvider } from '../firebase';
 import styles from './Login.module.css';
 
 const PERKS = [
@@ -17,31 +18,46 @@ export default function Register() {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    setTimeout(() => {
+    setError('');
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      await updateProfile(userCredential.user, { displayName: name });
+      navigate('/program');
+    } catch (err) {
+      console.error(err);
+      if (err.code === 'auth/email-already-in-use') {
+        setError('Email sudah terdaftar. Silakan login.');
+      } else if (err.code === 'auth/weak-password') {
+        setError('Password terlalu lemah (minimal 6 karakter).');
+      } else {
+        setError('Gagal mendaftar. Silakan coba lagi.');
+      }
+    } finally {
       setIsLoading(false);
-      localStorage.setItem('fitlife_user', JSON.stringify({ name, email }));
-      window.location.href = '/program';
-    }, 1500);
+    }
   };
 
-  const loginWithGoogle = useGoogleLogin({
-    onSuccess: async (tokenResponse) => {
-      try {
-        const userInfo = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-          headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
-        }).then(res => res.json());
-        localStorage.setItem('fitlife_user', JSON.stringify({ name: userInfo.name, email: userInfo.email, picture: userInfo.picture }));
-        window.location.href = '/program';
-      } catch { setIsGoogleLoading(false); }
-    },
-    onError: () => setIsGoogleLoading(false),
-  });
-
-  const handleGoogle = () => { setIsGoogleLoading(true); loginWithGoogle(); };
+  const handleGoogle = async () => {
+    setIsGoogleLoading(true);
+    setError('');
+    try {
+      await signInWithPopup(auth, googleProvider);
+      navigate('/program');
+    } catch (err) {
+      console.error(err);
+      if (err.code !== 'auth/popup-closed-by-user') {
+        setError('Gagal mendaftar dengan Google.');
+      }
+    } finally {
+      setIsGoogleLoading(false);
+    }
+  };
 
   return (
     <div className={styles.splitPage}>
@@ -79,6 +95,12 @@ export default function Register() {
             <h2>Buat Akun Baru 🚀</h2>
             <p>Gratis selamanya — mulai dalam 30 detik</p>
           </div>
+
+          {error && (
+            <div style={{ padding: '10px', background: 'rgba(248,113,113,0.1)', color: '#F87171', borderRadius: '8px', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
+              <AlertCircle size={16} /> {error}
+            </div>
+          )}
 
           <button type="button" className={`${styles.oauthBtn} ${isGoogleLoading ? styles.btnDisabled : ''}`}
             onClick={handleGoogle} disabled={isGoogleLoading}>

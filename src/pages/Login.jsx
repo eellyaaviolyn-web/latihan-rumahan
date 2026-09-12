@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Flame, Mail, Lock, ArrowRight, Loader2, Star } from 'lucide-react';
-import { useGoogleLogin } from '@react-oauth/google';
+import { Link, useNavigate } from 'react-router-dom';
+import { Flame, Mail, Lock, ArrowRight, Loader2, AlertCircle } from 'lucide-react';
+import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import { auth, googleProvider } from '../firebase';
 import styles from './Login.module.css';
 
 const STATS = [
@@ -15,31 +16,43 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    setTimeout(() => {
+    setError('');
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      navigate('/program');
+    } catch (err) {
+      console.error(err);
+      if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
+        setError('Email atau password salah.');
+      } else {
+        setError('Gagal login. Silakan coba lagi.');
+      }
+    } finally {
       setIsLoading(false);
-      localStorage.setItem('fitlife_user', JSON.stringify({ name: email.split('@')[0], email }));
-      window.location.href = '/program';
-    }, 1500);
+    }
   };
 
-  const loginWithGoogle = useGoogleLogin({
-    onSuccess: async (tokenResponse) => {
-      try {
-        const userInfo = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-          headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
-        }).then(res => res.json());
-        localStorage.setItem('fitlife_user', JSON.stringify({ name: userInfo.name, email: userInfo.email, picture: userInfo.picture }));
-        window.location.href = '/program';
-      } catch { setIsGoogleLoading(false); }
-    },
-    onError: () => setIsGoogleLoading(false),
-  });
-
-  const handleGoogle = () => { setIsGoogleLoading(true); loginWithGoogle(); };
+  const handleGoogle = async () => {
+    setIsGoogleLoading(true);
+    setError('');
+    try {
+      await signInWithPopup(auth, googleProvider);
+      navigate('/program');
+    } catch (err) {
+      console.error(err);
+      if (err.code !== 'auth/popup-closed-by-user') {
+        setError('Gagal login dengan Google.');
+      }
+    } finally {
+      setIsGoogleLoading(false);
+    }
+  };
 
   return (
     <div className={styles.splitPage}>
@@ -82,6 +95,12 @@ export default function Login() {
             <h2>Selamat Datang 👋</h2>
             <p>Masuk ke akun FitLife kamu</p>
           </div>
+
+          {error && (
+            <div style={{ padding: '10px', background: 'rgba(248,113,113,0.1)', color: '#F87171', borderRadius: '8px', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
+              <AlertCircle size={16} /> {error}
+            </div>
+          )}
 
           <button type="button" className={`${styles.oauthBtn} ${isGoogleLoading ? styles.btnDisabled : ''}`}
             onClick={handleGoogle} disabled={isGoogleLoading}>
