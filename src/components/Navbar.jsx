@@ -59,6 +59,24 @@ export default function Navbar() {
               </NavLink>
             </li>
           ))}
+          {/* Mobile-only auth links */}
+          {!user && (
+            <>
+              <li className={styles.mobileAuthDivider} />
+              <li><Link to="/login" className={styles.link} onClick={close}>Login</Link></li>
+              <li><Link to="/register" className={`${styles.link} ${styles.mobileStartBtn}`} onClick={close}>Mulai Gratis →</Link></li>
+            </>
+          )}
+          {user && (
+            <>
+              <li className={styles.mobileAuthDivider} />
+              <li>
+                <button onClick={handleLogout} className={`${styles.link} ${styles.mobileLogout}`}>
+                  Keluar dari akun
+                </button>
+              </li>
+            </>
+          )}
         </ul>
 
         {/* Right Actions */}

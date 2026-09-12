@@ -1,21 +1,9 @@
-:root {
-  --bg-card: #1a1a2e;
-  --radius: 12px;
-  --border: #2e303a;
-  --accent: #ff6b35;
-  --text-primary: #ffffff;
-  --text-secondary: #a0a0b0;
-  --success: #22c55e;
-  --warning: #eab308;
-}
-
 .timerContainer {
-  background: var(--bg-card);
-  border-radius: var(--radius);
-  padding: 25px;
-  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.025);
+  border-radius: 18px;
+  padding: 26px;
+  border: 1px solid rgba(255,255,255,0.08);
   text-align: center;
-  font-family: 'Poppins', sans-serif;
   box-sizing: border-box;
 }
 
@@ -23,121 +11,123 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 14px;
 }
-
 .setLabel {
-  font-size: 0.9rem;
-  color: var(--text-secondary);
+  font-size: 0.82rem;
+  color: #64748B;
   display: flex;
   align-items: center;
   gap: 6px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
-
 .setCount {
-  font-weight: 700;
-  color: var(--accent);
+  font-weight: 900;
+  font-size: 1rem;
+  color: #FF5500;
 }
 
 .progressBar {
   width: 100%;
-  height: 6px;
-  background: var(--border);
-  border-radius: 3px;
+  height: 5px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 99px;
   margin-bottom: 20px;
   overflow: hidden;
 }
-
 .progressFill {
   height: 100%;
-  background: var(--accent);
-  border-radius: 3px;
-  transition: width 0.3s;
+  background: linear-gradient(90deg, #FF5500, #FF2A00);
+  border-radius: 99px;
+  transition: width 0.4s ease;
+  box-shadow: 0 0 10px rgba(255,85,0,0.4);
 }
 
 .timeDisplay {
-  font-size: 3.5rem;
-  font-weight: 700;
-  margin: 15px 0;
+  font-size: 4rem;
+  font-weight: 900;
+  margin: 10px 0;
   font-variant-numeric: tabular-nums;
-  color: var(--text-primary);
+  color: #fff;
+  letter-spacing: -0.04em;
+  line-height: 1;
 }
-
 .timeDisplay.resting,
 .resting {
-  color: var(--accent);
-  animation: pulse 1s infinite;
+  color: #FF5500;
+  animation: pulse 1s ease-in-out infinite;
 }
 
 .label {
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-  margin-bottom: 5px;
-}
-
-.repInfo {
+  color: #64748B;
+  font-size: 0.82rem;
   font-weight: 600;
-  font-size: 1rem;
-  margin-bottom: 20px;
+}
+.repInfo {
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .restLabel {
-  color: var(--accent);
-  font-weight: 600;
-  font-size: 1.1rem;
-  margin-bottom: 10px;
-}
-
-.finishedLabel {
-  color: var(--success);
-  font-size: 1.5rem;
+  color: #FF5500;
   font-weight: 700;
+  font-size: 0.9rem;
+  background: rgba(255,85,0,0.1);
+  border: 1px solid rgba(255,85,0,0.25);
+  border-radius: 8px;
+  padding: 6px 14px;
+  display: inline-block;
+  margin: 6px 0;
+}
+.finishedLabel {
+  color: #4ADE80;
+  font-size: 1.3rem;
+  font-weight: 900;
+  animation: bounceIn 0.5s ease;
 }
 
 .controls {
   display: flex;
   justify-content: center;
-  gap: 15px;
+  gap: 14px;
   margin-top: 20px;
 }
-
 .controlBtn {
-  width: 50px;
-  height: 50px;
+  width: 52px; height: 52px;
   border-radius: 50%;
   border: none;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+  font-size: 1rem;
 }
-
 .playBtn {
-  background: var(--success);
-  color: white;
+  background: linear-gradient(135deg, #4ADE80, #22C55E);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(74,222,128,0.35);
 }
-
 .pauseBtn {
-  background: var(--warning);
-  color: #333;
+  background: linear-gradient(135deg, #FBBF24, #F59E0B);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(251,191,36,0.35);
 }
-
 .resetBtn {
-  background: var(--border);
-  color: var(--text-primary);
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: #94A3B8;
 }
-
-.controlBtn:hover {
-  transform: scale(1.1);
-}
+.controlBtn:hover { transform: scale(1.1); }
+.resetBtn:hover { background: rgba(255,255,255,0.14); color: #fff; }
 
 @keyframes pulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+@keyframes bounceIn {
+  0% { transform: scale(0.5); opacity: 0; }
+  70% { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
 }
