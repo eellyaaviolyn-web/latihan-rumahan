@@ -1,60 +1,50 @@
 import React from 'react';
-import { Filter } from 'lucide-react';
 import styles from './FilterSidebar.module.css';
 
-const KATEGORI_OPTIONS = ['Semua', 'Kardio', 'Kekuatan', 'Fleksibilitas'];
-const LEVEL_OPTIONS = ['Semua', 'Pemula', 'Menengah', 'Lanjutan'];
+const CATEGORIES = ['Semua', 'Kardio', 'Kekuatan', 'HIIT', 'Yoga', 'Peregangan'];
+const LEVELS = ['Semua', 'Pemula', 'Menengah', 'Lanjutan'];
 
-export default function FilterSidebar({
-  activeKategori = 'Semua',
-  activeLevel = 'Semua',
-  onKategoriChange,
-  onLevelChange,
-}) {
+const CATEGORY_ICONS = {
+  Semua: '⚡', Kardio: '🏃', Kekuatan: '💪', HIIT: '🔥', Yoga: '🧘', Peregangan: '🤸'
+};
+
+export default function FilterSidebar({ activeKategori, activeLevel, onKategoriChange, onLevelChange }) {
   return (
-    <aside className={styles.sidebar}>
-      <h3 className={styles.title}>
-        <Filter size={18} />
-        <span>Filter Latihan</span>
-      </h3>
-
+    <div className={styles.filterWrap}>
+      {/* Category pills */}
       <div className={styles.group}>
-        <div className={styles.groupTitle}>Kategori</div>
-        <div className={styles.buttons}>
-          {KATEGORI_OPTIONS.map((kategori) => {
-            const isActive = activeKategori === kategori;
-            return (
-              <button
-                key={kategori}
-                type="button"
-                className={`${styles.filterBtn} ${isActive ? styles.filterBtnActive : ''}`}
-                onClick={() => onKategoriChange && onKategoriChange(kategori)}
-              >
-                {kategori}
-              </button>
-            );
-          })}
+        <span className={styles.groupLabel}>Kategori</span>
+        <div className={styles.pills}>
+          {CATEGORIES.map(k => (
+            <button
+              key={k}
+              type="button"
+              className={`${styles.pill} ${activeKategori === k ? styles.pillActive : ''}`}
+              onClick={() => onKategoriChange(k)}
+            >
+              <span>{CATEGORY_ICONS[k]}</span>
+              {k}
+            </button>
+          ))}
         </div>
       </div>
 
+      {/* Level pills */}
       <div className={styles.group}>
-        <div className={styles.groupTitle}>Level</div>
-        <div className={styles.buttons}>
-          {LEVEL_OPTIONS.map((level) => {
-            const isActive = activeLevel === level;
-            return (
-              <button
-                key={level}
-                type="button"
-                className={`${styles.filterBtn} ${isActive ? styles.filterBtnActive : ''}`}
-                onClick={() => onLevelChange && onLevelChange(level)}
-              >
-                {level}
-              </button>
-            );
-          })}
+        <span className={styles.groupLabel}>Level</span>
+        <div className={styles.pills}>
+          {LEVELS.map(l => (
+            <button
+              key={l}
+              type="button"
+              className={`${styles.pill} ${activeLevel === l ? styles.pillActive : ''} ${styles['pill' + l]}`}
+              onClick={() => onLevelChange(l)}
+            >
+              {l}
+            </button>
+          ))}
         </div>
       </div>
-    </aside>
+    </div>
   );
 }

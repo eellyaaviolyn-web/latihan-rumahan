@@ -1,150 +1,182 @@
-.page {
-  padding: 120px 20px;
-  max-width: 900px;
-  margin: 0 auto;
-  min-height: 100vh;
-  text-align: center;
-}
+.page { min-height: 100vh; }
 
-.header h2 {
-  font-size: clamp(2rem, 4vw, 2.8rem);
-  margin-bottom: 12px;
-  color: #fff;
-  letter-spacing: -0.03em;
-}
-
-.header p {
-  color: #94A3B8;
-  margin-bottom: 60px;
-  font-size: 1.1rem;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 30px;
-  justify-content: center;
-  align-items: center;
-}
-
-.card {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 24px;
-  padding: 40px;
-  text-align: left;
+/* ── Hero ── */
+.hero {
   position: relative;
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  transition: transform 0.3s, border-color 0.3s;
+  padding: 80px 28px 50px;
+  text-align: center;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 18px; overflow: hidden;
 }
-
-.card:hover {
-  transform: translateY(-5px);
-  border-color: rgba(255, 255, 255, 0.15);
+.heroGlow {
+  position: absolute; top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 600px; height: 400px;
+  background: radial-gradient(ellipse, rgba(251,191,36,0.1) 0%, transparent 65%);
+  pointer-events: none;
 }
-
-.proCard {
-  border-color: rgba(255, 85, 0, 0.4);
-  box-shadow: 0 24px 60px rgba(255, 85, 0, 0.12);
-  background: linear-gradient(180deg, rgba(255,85,0,0.05) 0%, rgba(255,255,255,0.02) 100%);
-  transform: scale(1.05);
+.title {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 900; color: #fff;
+  letter-spacing: -0.04em; line-height: 1.1;
 }
-
-.proCard:hover {
-  transform: scale(1.05) translateY(-5px);
-  border-color: rgba(255, 85, 0, 0.6);
+.titleGrad {
+  background: linear-gradient(135deg, #FBBF24, #FF5500);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
+.sub { color: #94A3B8; font-size: 1rem; }
 
-.badge {
-  position: absolute;
-  top: -14px;
-  right: 30px;
-  background: linear-gradient(135deg, #FF5500, #FF2A00);
-  color: #fff;
-  padding: 6px 16px;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  font-weight: 800;
-  box-shadow: 0 4px 12px rgba(255, 85, 0, 0.4);
+/* Toggle */
+.toggle {
+  display: flex; align-items: center; gap: 12px;
+  font-size: 0.9rem; font-weight: 600;
 }
-
-.card h3 {
-  font-size: 1.4rem;
-  color: #E2E8F0;
-  margin-bottom: 15px;
-}
-
-.price {
-  font-size: 2.8rem;
-  font-weight: 900;
-  color: #fff;
-  margin-bottom: 30px;
-  letter-spacing: -0.04em;
-}
-
-.price span {
-  font-size: 1.1rem;
-  color: #94A3B8;
-  font-weight: 500;
-  letter-spacing: 0;
-}
-
-.features {
-  list-style: none;
-  margin-bottom: 40px;
+.toggleActive { color: #fff; }
+.toggleInactive { color: #475569; }
+.toggleBtn {
+  position: relative;
+  width: 48px; height: 26px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 99px;
+  cursor: pointer; transition: background 0.3s;
   padding: 0;
 }
+.toggleBtnOn { background: linear-gradient(135deg, #FF5500, #FF2A00); border-color: transparent; }
+.toggleKnob {
+  position: absolute;
+  top: 3px; left: 3px;
+  width: 18px; height: 18px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.3s;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+.toggleBtnOn .toggleKnob { transform: translateX(22px); }
+.saveBadge {
+  margin-left: 6px;
+  background: rgba(74,222,128,0.15);
+  border: 1px solid rgba(74,222,128,0.3);
+  color: #4ADE80; font-size: 0.7rem; font-weight: 700;
+  padding: 2px 8px; border-radius: 99px;
+}
 
+/* ── Plans ── */
+.plansSection { padding: 0 28px 50px; max-width: 900px; margin: 0 auto; }
+.plansGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 30px;
+}
+.card {
+  position: relative;
+  background: rgba(255,255,255,0.025);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 24px;
+  padding: 36px 30px;
+  display: flex; flex-direction: column; gap: 14px;
+  overflow: hidden;
+}
+.proCard {
+  border-color: rgba(255,85,0,0.35);
+  background: linear-gradient(160deg, rgba(255,85,0,0.07) 0%, rgba(255,255,255,0.02) 100%);
+  box-shadow: 0 0 60px rgba(255,85,0,0.08);
+}
+.shimmerBorder {
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  background: linear-gradient(90deg, transparent, rgba(255,85,0,0.35), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 3s linear infinite;
+  pointer-events: none;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: xor;
+  padding: 1px;
+}
+.badge {
+  position: absolute; top: -12px; right: 24px;
+  background: linear-gradient(135deg, #FF5500, #FF2A00);
+  color: #fff; font-size: 0.78rem; font-weight: 800;
+  padding: 6px 16px; border-radius: 99px;
+  box-shadow: 0 4px 14px rgba(255,85,0,0.4);
+}
+.card h3 { font-size: 1.3rem; font-weight: 800; color: #E2E8F0; }
+.price { display: flex; align-items: baseline; gap: 4px; }
+.price span { font-size: 2.4rem; font-weight: 900; color: #fff; letter-spacing: -0.04em; }
+.price small { color: #64748B; font-size: 0.9rem; }
+.annualNote { font-size: 0.8rem; color: #4ADE80; margin-top: -8px; }
+.planDesc { font-size: 0.88rem; color: #64748B; }
+.features { list-style: none; display: flex; flex-direction: column; gap: 10px; }
 .features li {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  color: #CBD5E1;
-  margin-bottom: 16px;
-  font-size: 0.98rem;
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 0.9rem; color: #CBD5E1;
 }
-
 .btnGhost {
-  width: 100%;
-  padding: 14px;
+  width: 100%; padding: 13px;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #fff;
-  font-weight: 700;
-  font-size: 1rem;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: #fff; font-weight: 700; font-size: 0.95rem;
   transition: background 0.2s, transform 0.2s;
+  margin-top: auto;
 }
-
-.btnGhost:hover {
-  background: rgba(255, 255, 255, 0.1);
-  transform: translateY(-2px);
-}
-
+.btnGhost:hover { background: rgba(255,255,255,0.1); transform: translateY(-2px); }
 .btnPrimary {
-  width: 100%;
-  padding: 14px;
+  width: 100%; padding: 14px;
   border-radius: 12px;
   background: linear-gradient(135deg, #FF5500, #FF2A00);
-  border: none;
-  color: #fff;
-  font-weight: 800;
-  font-size: 1rem;
-  box-shadow: 0 8px 24px rgba(255, 85, 0, 0.3);
+  border: none; color: #fff; font-weight: 800; font-size: 0.95rem;
+  box-shadow: 0 8px 24px rgba(255,85,0,0.3);
   transition: transform 0.2s, box-shadow 0.2s;
+  margin-top: auto;
+}
+.btnPrimary:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(255,85,0,0.45); }
+.cancelNote { text-align: center; font-size: 0.75rem; color: #475569; margin-top: -6px; }
+
+/* Trust Badges */
+.trustRow {
+  display: flex; flex-wrap: wrap; gap: 12px;
+  justify-content: center;
+}
+.trustItem {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 0.82rem; color: #64748B; font-weight: 500;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  padding: 8px 16px; border-radius: 10px;
 }
 
-.btnPrimary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 32px rgba(255, 85, 0, 0.45);
+/* ── FAQ ── */
+.faqSection { padding: 0 28px 80px; max-width: 700px; margin: 0 auto; }
+.faqTitle { font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 800; color: #fff; text-align: center; margin-bottom: 28px; }
+.faqList { display: flex; flex-direction: column; gap: 10px; }
+.faqItem {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px; overflow: hidden;
+  transition: border-color 0.2s;
+}
+.faqOpen { border-color: rgba(255,85,0,0.3); }
+.faqQ {
+  width: 100%; display: flex; align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px;
+  background: transparent; border: none; color: #E2E8F0;
+  font-size: 0.95rem; font-weight: 700; text-align: left;
+  cursor: pointer; gap: 12px;
+}
+.faqIcon { flex-shrink: 0; color: #64748B; transition: transform 0.3s; }
+.faqOpen .faqIcon { transform: rotate(180deg); color: #FF5500; }
+.faqA { padding: 0 20px 18px; font-size: 0.88rem; color: #94A3B8; line-height: 1.7; }
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
-@media (max-width: 768px) {
-  .proCard {
-    transform: scale(1);
-  }
-  .proCard:hover {
-    transform: translateY(-5px);
-  }
+@media (max-width: 640px) {
+  .plansGrid { grid-template-columns: 1fr; }
+  .hero, .plansSection, .faqSection { padding-left: 18px; padding-right: 18px; }
 }

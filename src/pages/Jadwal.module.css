@@ -1,1 +1,231 @@
-.page{max-width:1200px;margin:auto;padding:42px 24px 70px}.header{text-align:left;margin-bottom:38px}.title{font-size:clamp(2rem,4vw,3.1rem);font-weight:700;margin:0 0 8px;background:linear-gradient(100deg,var(--text-primary),var(--accent-hover));-webkit-background-clip:text;background-clip:text;color:transparent}.subtitle{color:var(--text-secondary);font-size:1.02rem}.scheduleGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}.dayCard{background:linear-gradient(160deg,rgba(255,255,255,.055),rgba(255,255,255,.015));border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);transition:transform .25s,box-shadow .25s;display:flex;flex-direction:column}.dayCard:hover{transform:translateY(-4px);box-shadow:var(--shadow)}.dayHeader{padding:16px 20px;font-weight:700;font-size:1.05rem;color:#fff}.dayHeaderNormal{background:linear-gradient(135deg,var(--accent),#d94f2b)}.dayHeaderRest{background:linear-gradient(135deg,#253242,#17212c)}.dayContent{padding:20px;flex:1;display:flex;flex-direction:column}.dayFocus{color:var(--text-secondary);font-size:.88rem;margin-bottom:15px;font-weight:600}.workoutList{display:flex;flex-direction:column;gap:8px}.workoutItem{display:flex;align-items:center;gap:10px;padding:11px;background:rgba(255,255,255,.035);border-radius:10px;text-decoration:none;color:var(--text-primary);transition:background .2s,transform .2s}.workoutItem:hover{background:var(--accent-soft);transform:translateX(3px)}.workoutEmoji{font-size:1.4rem;line-height:1}.workoutNama{font-weight:600;font-size:.9rem}.badge{display:inline-block;padding:4px 9px;border-radius:999px;font-size:.7rem;font-weight:700;margin-left:auto}.badgePemula{background:rgba(112,212,155,.12);color:var(--success)}.badgeMenengah{background:rgba(243,201,105,.12);color:var(--warning)}.badgeLanjutan{background:rgba(240,127,134,.12);color:var(--danger)}.restMessage{text-align:center;padding:25px;color:var(--text-secondary);display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1}.restMessage svg{color:var(--accent);margin-bottom:10px}.tipsSection{margin-top:50px;padding:28px;background:var(--bg-card);border-radius:var(--radius);border:1px solid var(--border)}.tipsTitle{font-size:1.25rem;font-weight:700;margin:0 0 18px;color:var(--text-primary)}.tipsList{list-style:none;display:flex;flex-direction:column;gap:12px;padding:0;margin:0}.tipItem{display:flex;align-items:center;gap:10px;color:var(--text-secondary);line-height:1.5}.tipItem svg{color:var(--success);flex-shrink:0}@media(max-width:640px){.page{padding:30px 18px 55px}.header{margin-bottom:26px}.scheduleGrid{grid-template-columns:1fr}.tipsSection{margin-top:34px;padding:22px}}
+.page { min-height: 100vh; }
+
+/* ── Hero ── */
+.hero {
+  position: relative;
+  padding: 80px 28px 60px;
+  text-align: center;
+  overflow: hidden;
+}
+.heroGlow {
+  position: absolute;
+  top: -60px; left: 50%;
+  transform: translateX(-50%);
+  width: 600px; height: 400px;
+  background: radial-gradient(ellipse, rgba(129,140,248,0.12) 0%, transparent 65%);
+  pointer-events: none;
+}
+.heroInner {
+  position: relative;
+  max-width: 600px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+.title {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+}
+.titleGrad {
+  background: linear-gradient(135deg, #818CF8, #00F2FE);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.sub { color: #94A3B8; font-size: 1rem; max-width: 480px; }
+
+/* ── Weekly Progress ── */
+.weekProgress {
+  width: 100%;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 18px 22px;
+  margin-top: 8px;
+}
+.weekProgressHead {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: #94A3B8;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+.weekPct {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #fff;
+}
+.weekBar {
+  height: 8px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.weekBarFill {
+  height: 100%;
+  background: linear-gradient(90deg, #FF5500, #FF9A3C);
+  border-radius: 99px;
+  transition: width 1s ease;
+  box-shadow: 0 0 12px rgba(255,85,0,0.4);
+}
+
+/* ── Calendar Grid ── */
+.calSection {
+  padding: 0 28px 60px;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+.calGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+/* ── Day Card ── */
+.dayCard {
+  background: rgba(255,255,255,0.025);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 18px;
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  border-top: 3px solid var(--accent, #FF5500);
+}
+.dayCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.3);
+}
+.restCard {
+  border-top-color: #475569;
+  opacity: 0.7;
+}
+
+.dayHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px 0;
+}
+.dayName {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #fff;
+}
+.activeTag {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 99px;
+  border: 1px solid;
+}
+.restTag {
+  font-size: 0.68rem;
+  color: #475569;
+  font-weight: 600;
+}
+.dayFocus {
+  padding: 10px 16px 12px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ── Workout List ── */
+.workoutList {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0 10px 12px;
+}
+.workoutItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.2s;
+}
+.workoutItem:hover { background: rgba(255,255,255,0.06); }
+.wEmoji { font-size: 1.3rem; flex-shrink: 0; }
+.wInfo { flex: 1; min-width: 0; }
+.wName {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #E2E8F0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.wLevel { font-size: 0.72rem; color: #64748B; font-weight: 500; }
+
+/* ── Rest Content ── */
+.restContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  padding: 18px 16px 20px;
+}
+.restContent p { font-size: 0.8rem; color: #475569; line-height: 1.5; }
+
+/* ── Tips ── */
+.tipsSection {
+  padding: 0 28px 80px;
+}
+.tipsInner {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+}
+.tipsTitle {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 800;
+  color: #fff;
+}
+.tipsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  width: 100%;
+  margin-top: 8px;
+}
+.tipCard {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 16px;
+  padding: 24px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: background 0.2s, transform 0.2s;
+}
+.tipCard:hover { background: rgba(255,255,255,0.06); transform: translateY(-3px); }
+.tipIcon {
+  width: 42px; height: 42px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+}
+.tipCard h4 { font-size: 0.95rem; color: #E2E8F0; font-weight: 700; }
+.tipCard p  { font-size: 0.85rem; color: #94A3B8; line-height: 1.6; }
+
+@media (max-width: 640px) {
+  .hero { padding: 60px 18px 40px; }
+  .calSection, .tipsSection { padding-left: 18px; padding-right: 18px; }
+}
