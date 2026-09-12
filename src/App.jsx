@@ -9,7 +9,6 @@ import Tentang from './pages/Tentang'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import ForgotPassword from './pages/ForgotPassword'
-import ResetPassword from './pages/ResetPassword'
 import Harga from './pages/Harga'
 import Komunitas from './pages/Komunitas'
 
@@ -27,7 +26,6 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/lupa-password" element={<ForgotPassword />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/harga" element={<Harga />} />
           <Route path="/komunitas" element={<Komunitas />} />
         </Routes>
