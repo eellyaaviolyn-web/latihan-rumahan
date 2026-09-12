@@ -17,7 +17,11 @@ export default function ForgotPassword() {
     setError('');
     
     try {
-      await sendPasswordResetEmail(auth, email);
+      const actionCodeSettings = {
+        url: 'https://latihan-rumahan-alpha.vercel.app/reset-password',
+        handleCodeInApp: false,
+      };
+      await sendPasswordResetEmail(auth, email, actionCodeSettings);
       setSent(true);
     } catch (err) {
       console.error(err);
