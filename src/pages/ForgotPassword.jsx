@@ -27,23 +27,16 @@ export default function ForgotPassword() {
     const code = Math.floor(100000 + Math.random() * 900000).toString();
     setGeneratedCode(code);
 
-    // KUNCI EMAILJS (Silakan isi jika sudah punya akun EmailJS)
-    const serviceId = 'SERVICE_ID_KAMU'; 
-    const templateId = 'TEMPLATE_ID_KAMU';
-    const publicKey = 'PUBLIC_KEY_KAMU';
+    const serviceId = 'service_1ex4sqn';
+    const templateId = 'template_zg3j5br';
+    const publicKey = '3ITqVBk8h3_op6zUL';
 
     try {
-      if (serviceId === 'SERVICE_ID_KAMU') {
-        // SIMULASI (Karena belum ada EmailJS)
-        console.log("KODE OTP SIMULASI:", code);
-        alert(`[SIMULASI OTP]\n\nKarena EmailJS belum disetting, kode kamu adalah: ${code}\n\nMasukkan kode ini di kotak!`);
-      } else {
-        // MENGIRIM EMAIL ASLI DENGAN EMAILJS
-        await emailjs.send(serviceId, templateId, {
-          to_email: email,
-          otp_code: code
-        }, publicKey);
-      }
+      await emailjs.send(serviceId, templateId, {
+        to_email: email,
+        otp_code: code,
+        passcode: code,
+      }, publicKey);
       setStep(2);
     } catch (err) {
       console.error(err);
