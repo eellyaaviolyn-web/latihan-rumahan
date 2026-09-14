@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { workouts, jadwalMingguan } from '../data/workouts';
-import { Calendar, Coffee, CheckCircle, Flame, Droplets, Moon, ChevronRight } from 'lucide-react';
+import { Calendar, Coffee, CheckCircle, Flame, Droplets, Moon, ChevronRight, RotateCcw } from 'lucide-react';
+import { useToast } from '../components/Toast';
 import styles from './Jadwal.module.css';
 
 const DAY_ACCENT = {
@@ -17,10 +18,49 @@ const TIPS = [
   { icon: <CheckCircle size={20} color="#4ADE80" />, title: 'Dengarkan Tubuh', text: 'Hentikan latihan jika merasakan nyeri berlebihan atau kelelahan ekstrem.' },
 ];
 
+const TODAY_KEY = `fitlife_tracker_${new Date().toISOString().split('T')[0]}`;
+
 export default function Jadwal() {
-  const doneCount = jadwalMingguan.filter(d => !d.istirahat).length;
+  const toast = useToast();
+
+  // Workout tracker dari localStorage
+  const [checked, setChecked] = useState(() => {
+    try { return JSON.parse(localStorage.getItem(TODAY_KEY)) || {}; }
+    catch { return {}; }
+  });
+
+  useEffect(() => {
+    localStorage.setItem(TODAY_KEY, JSON.stringify(checked));
+  }, [checked]);
+
+  const toggleCheck = (id) => {
+    setChecked(prev => {
+      const next = { ...prev, [id]: !prev[id] };
+      if (next[id]) toast('Latihan selesai! Lanjut terus! 🔥', 'success');
+      else toast('Centang dibatalkan', 'info');
+      return next;
+    });
+  };
+
+  const resetTracker = () => {
+    setChecked({});
+    localStorage.removeItem(TODAY_KEY);
+    toast('Progress hari ini direset', 'info');
+  };
+
+  // Hitung progress tracker hari ini
+  const allWorkoutIds = jadwalMingguan
+    .filter(d => !d.istirahat)
+    .flatMap(d => d.latihan);
+  const uniqueIds = [...new Set(allWorkoutIds)];
+  const checkedCount = uniqueIds.filter(id => checked[id]).length;
+  const trackerPct = uniqueIds.length > 0
+    ? Math.round((checkedCount / uniqueIds.length) * 100)
+    : 0;
+
+  const activeCount = jadwalMingguan.filter(d => !d.istirahat).length;
   const totalCount = jadwalMingguan.length;
-  const pct = Math.round((doneCount / totalCount) * 100);
+  const weekPct = Math.round((activeCount / totalCount) * 100);
 
   return (
     <div className={styles.page}>
@@ -39,12 +79,43 @@ export default function Jadwal() {
           <div className={styles.weekProgress}>
             <div className={styles.weekProgressHead}>
               <span>Progress Minggu Ini</span>
-              <span className={styles.weekPct}><Flame size={14} color="#FF5500" /> {doneCount}/{totalCount} hari aktif</span>
+              <span className={styles.weekPct}><Flame size={14} color="#FF5500" /> {activeCount}/{totalCount} hari aktif</span>
             </div>
             <div className={styles.weekBar}>
-              <div className={styles.weekBarFill} style={{ width: `${pct}%` }} />
+              <div className={styles.weekBarFill} style={{ width: `${weekPct}%` }} />
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* ── Workout Tracker Banner ── */}
+      <section className={styles.trackerSection}>
+        <div className={styles.trackerCard}>
+          <div className={styles.trackerLeft}>
+            <div className={styles.trackerTitle}>
+              <CheckCircle size={20} color="#4ADE80" />
+              <span>Tracker Hari Ini</span>
+            </div>
+            <p className={styles.trackerSub}>
+              {checkedCount === 0
+                ? 'Belum ada latihan yang diselesaikan hari ini'
+                : checkedCount === uniqueIds.length
+                  ? '🎉 Semua latihan hari ini selesai!'
+                  : `${checkedCount} dari ${uniqueIds.length} latihan selesai`}
+            </p>
+          </div>
+          <div className={styles.trackerRight}>
+            <div className={styles.trackerPctText} style={{ color: trackerPct === 100 ? '#4ADE80' : '#FF5500' }}>
+              {trackerPct}%
+            </div>
+            <button onClick={resetTracker} className={styles.resetBtn} title="Reset progress hari ini">
+              <RotateCcw size={14} /> Reset
+            </button>
+          </div>
+        </div>
+        <div className={styles.trackerBar}>
+          <div className={styles.trackerFill}
+            style={{ width: `${trackerPct}%`, background: trackerPct === 100 ? '#4ADE80' : 'linear-gradient(90deg, #FF5500, #FF2A00)' }} />
         </div>
       </section>
 
@@ -80,15 +151,25 @@ export default function Jadwal() {
                     {day.latihan.map((id) => {
                       const w = workouts.find((x) => x.id === id);
                       if (!w) return null;
+                      const isDone = !!checked[id];
                       return (
-                        <Link key={w.id} to={`/detail/${w.id}`} className={styles.workoutItem}>
+                        <div key={w.id} className={`${styles.workoutItem} ${isDone ? styles.workoutDone : ''}`}>
+                          <button
+                            className={`${styles.checkBtn} ${isDone ? styles.checkBtnDone : ''}`}
+                            onClick={() => toggleCheck(id)}
+                            title={isDone ? 'Batalkan' : 'Tandai selesai'}
+                          >
+                            <CheckCircle size={16} />
+                          </button>
                           <span className={styles.wEmoji}>{w.emoji}</span>
                           <div className={styles.wInfo}>
-                            <span className={styles.wName}>{w.nama}</span>
+                            <span className={`${styles.wName} ${isDone ? styles.wNameDone : ''}`}>{w.nama}</span>
                             <span className={styles.wLevel}>{w.level}</span>
                           </div>
-                          <ChevronRight size={16} color="#475569" />
-                        </Link>
+                          <Link to={`/detail/${w.id}`} className={styles.wLink}>
+                            <ChevronRight size={16} color="#475569" />
+                          </Link>
+                        </div>
                       );
                     })}
                   </div>

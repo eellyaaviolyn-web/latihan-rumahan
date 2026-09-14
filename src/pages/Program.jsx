@@ -89,9 +89,14 @@ export default function Program() {
           </div>
         ) : (
           <div className={styles.empty}>
-            <span className={styles.emptyEmoji}>🔍</span>
-            <h3>Tidak ada latihan ditemukan</h3>
+            <div className={styles.emptyIllustration}>🏋️</div>
+            <h3>Tidak Ada Latihan Ditemukan</h3>
             <p>Coba ubah filter kategori atau level untuk menemukan latihan yang tepat.</p>
+            <button
+              onClick={() => { setActiveKategori('Semua'); setActiveLevel('Semua'); setSearchParams({}); }}
+              className={styles.emptyBtn}>
+              Reset Filter
+            </button>
           </div>
         )}
       </section>

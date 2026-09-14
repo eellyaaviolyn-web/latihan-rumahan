@@ -4,11 +4,11 @@ import { Flame, Menu, X, LogOut } from 'lucide-react';
 import styles from './Navbar.module.css';
 
 const LINKS = [
-  { to: '/program', label: 'Program'    },
-  { to: '/jadwal',  label: 'Jadwal'     },
-  { to: '/tentang', label: 'Instruktur' },
-  { to: '/komunitas', label: 'Komunitas'  },
-  { to: '/harga',     label: 'Harga'      },
+  { to: '/program',    label: 'Program'    },
+  { to: '/jadwal',     label: 'Jadwal'     },
+  { to: '/kalkulator', label: 'Kalkulator' },
+  { to: '/komunitas',  label: 'Komunitas'  },
+  { to: '/harga',      label: 'Harga'      },
 ];
 
 export default function Navbar() {

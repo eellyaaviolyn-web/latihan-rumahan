@@ -112,18 +112,44 @@
   gap: 22px;
 }
 
-/* Empty state */
 .empty {
   text-align: center;
-  padding: 100px 0;
+  padding: 80px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
+  animation: fadeIn 0.4s ease;
 }
-.emptyEmoji { font-size: 3.5rem; }
-.empty h3 { font-size: 1.3rem; color: #E2E8F0; }
-.empty p  { color: #64748B; font-size: 0.95rem; }
+.emptyIllustration {
+  font-size: 5rem;
+  animation: floatY 3s ease-in-out infinite;
+}
+.empty h3 { font-size: 1.4rem; font-weight: 800; color: #E2E8F0; }
+.empty p  { color: #64748B; font-size: 0.95rem; max-width: 300px; line-height: 1.6; }
+.emptyBtn {
+  margin-top: 4px;
+  padding: 10px 24px;
+  background: linear-gradient(135deg, #FF5500, #FF2A00);
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 16px rgba(255,85,0,0.3);
+}
+.emptyBtn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,85,0,0.4); }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes floatY {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
 
 @media (max-width: 640px) {
   .hero { padding: 60px 18px 40px; }

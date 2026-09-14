@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom'
+import { ToastProvider } from './components/Toast'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import Beranda from './pages/Beranda'
@@ -11,10 +12,11 @@ import Register from './pages/Register'
 import ForgotPassword from './pages/ForgotPassword'
 import Harga from './pages/Harga'
 import Komunitas from './pages/Komunitas'
+import Kalkulator from './pages/Kalkulator'
 
 function App() {
   return (
-    <>
+    <ToastProvider>
       <Navbar />
       <div className="page-container">
         <Routes>
@@ -28,10 +30,11 @@ function App() {
           <Route path="/lupa-password" element={<ForgotPassword />} />
           <Route path="/harga" element={<Harga />} />
           <Route path="/komunitas" element={<Komunitas />} />
+          <Route path="/kalkulator" element={<Kalkulator />} />
         </Routes>
       </div>
       <Footer />
-    </>
+    </ToastProvider>
   )
 }
 

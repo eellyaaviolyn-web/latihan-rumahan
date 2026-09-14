@@ -150,11 +150,27 @@
   gap: 10px;
   padding: 10px;
   border-radius: 10px;
-  text-decoration: none;
   color: inherit;
-  transition: background 0.2s;
+  transition: background 0.2s, opacity 0.2s;
 }
 .workoutItem:hover { background: rgba(255,255,255,0.06); }
+.workoutDone { opacity: 0.6; }
+
+/* Check button */
+.checkBtn {
+  flex-shrink: 0;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.15);
+  background: transparent;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  color: rgba(255,255,255,0.2);
+  transition: all 0.2s;
+}
+.checkBtn:hover { border-color: #4ADE80; color: #4ADE80; }
+.checkBtnDone { border-color: #4ADE80; background: rgba(74,222,128,0.15); color: #4ADE80; }
+
 .wEmoji { font-size: 1.3rem; flex-shrink: 0; }
 .wInfo { flex: 1; min-width: 0; }
 .wName {
@@ -165,8 +181,59 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  transition: text-decoration 0.2s;
 }
+.wNameDone { text-decoration: line-through; color: #64748B; }
 .wLevel { font-size: 0.72rem; color: #64748B; font-weight: 500; }
+.wLink { display: flex; align-items: center; color: inherit; text-decoration: none; }
+
+/* ── Tracker Section ── */
+.trackerSection {
+  max-width: 1000px;
+  margin: 0 auto 32px;
+  padding: 0 28px;
+}
+.trackerCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 18px 24px;
+  margin-bottom: 8px;
+}
+.trackerLeft { display: flex; flex-direction: column; gap: 4px; }
+.trackerTitle { display: flex; align-items: center; gap: 8px; font-weight: 800; color: #fff; font-size: 0.95rem; }
+.trackerSub { font-size: 0.82rem; color: #64748B; }
+.trackerRight { display: flex; align-items: center; gap: 14px; }
+.trackerPctText { font-size: 2rem; font-weight: 900; letter-spacing: -0.04em; }
+.resetBtn {
+  display: flex; align-items: center; gap: 5px;
+  padding: 7px 14px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  color: #94A3B8;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.resetBtn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.trackerBar {
+  height: 5px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.trackerFill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.5s ease;
+}
+
 
 /* ── Rest Content ── */
 .restContent {
