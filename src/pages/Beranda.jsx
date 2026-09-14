@@ -1,8 +1,9 @@
 import React, { useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   ArrowRight, Star, Play, Brain, Dumbbell,
-  Users, Flame, Heart, Zap, Target, Award, Activity
+  Users, Flame, Heart, Zap, Target, Award,
+  Clock, ChevronRight, BarChart2
 } from 'lucide-react';
 import styles from './Beranda.module.css';
 
@@ -72,83 +73,228 @@ function PulseBars() {
   );
 }
 
+/* ─── Recommended Workout Data ─── */
+const RECOMMENDED = [
+  {
+    id: 1,
+    title: 'Full Body HIIT',
+    difficulty: 'Beginner',
+    diffColor: '#00C9A7',
+    duration: '20 min',
+    photo: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&q=80',
+    emoji: '🔥',
+  },
+  {
+    id: 2,
+    title: 'Core & Abs Burn',
+    difficulty: 'Intermediate',
+    diffColor: '#F5A623',
+    duration: '30 min',
+    photo: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400&q=80',
+    emoji: '💪',
+  },
+  {
+    id: 3,
+    title: 'Yoga Flow Pagi',
+    difficulty: 'Beginner',
+    diffColor: '#00C9A7',
+    duration: '25 min',
+    photo: 'https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=400&q=80',
+    emoji: '🧘',
+  },
+  {
+    id: 4,
+    title: 'Upper Body Power',
+    difficulty: 'Advanced',
+    diffColor: '#EF4444',
+    duration: '40 min',
+    photo: 'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?w=400&q=80',
+    emoji: '🏋️',
+  },
+  {
+    id: 5,
+    title: 'Leg Day Destroyer',
+    difficulty: 'Intermediate',
+    diffColor: '#F5A623',
+    duration: '35 min',
+    photo: 'https://images.unsplash.com/photo-1434682881908-b43d0467b798?w=400&q=80',
+    emoji: '🦵',
+  },
+  {
+    id: 6,
+    title: 'Cardio Endurance',
+    difficulty: 'Advanced',
+    diffColor: '#EF4444',
+    duration: '45 min',
+    photo: 'https://images.unsplash.com/photo-1538805060514-97d9cc17730c?w=400&q=80',
+    emoji: '⚡',
+  },
+];
+
 /* ─── Main Component ─── */
 export default function Beranda() {
   const navigate = useNavigate();
   const tilt = useTilt(8);
-
   const handleTilt = tilt.onMouseMove;
   const resetTilt  = tilt.onMouseLeave;
 
   return (
     <div className={styles.page}>
 
-      {/* ════════════════ HERO ════════════════ */}
+      {/* ════════════════ HERO (Photo) ════════════════ */}
+      <section className={styles.photoHero}>
+        {/* Cinematic background photo */}
+        <div className={styles.photoHeroBg}
+          style={{ backgroundImage: `url('https://images.unsplash.com/photo-1518611012118-696072aa579a?w=1600&q=85')` }} />
+        <div className={styles.photoHeroOverlay} />
+
+        <div className={styles.photoHeroContent}>
+          {/* Badge */}
+          <div className={styles.topBadge}>
+            <span>🔥</span>
+            <span>#1 Platform Fitness Rumahan di Indonesia</span>
+            <span className={styles.badgeStarRow}>
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} size={10} fill="#FBBF24" color="#FBBF24" />
+              ))}
+            </span>
+          </div>
+
+          {/* Headline */}
+          <h1 className={styles.photoHeadline}>
+            Transform Your Body<br />
+            <span className={styles.photoHeadlineGold}>At Home</span>
+          </h1>
+          <p className={styles.photoSub}>
+            Akses <strong>500+ program latihan</strong> terstruktur yang disesuaikan<br />
+            dengan level kebugaranmu. Cukup <strong>15–30 menit sehari</strong>.
+          </p>
+
+          {/* CTA */}
+          <div className={styles.ctaRow}>
+            <button type="button" className={styles.ctaPrimary}
+              onClick={() => navigate('/program')}>
+              Coba Gratis 14 Hari <ArrowRight size={17} />
+            </button>
+            <button type="button" className={styles.ctaGhost}
+              onClick={() => navigate('/program')}>
+              <span className={styles.playDot}><Play size={12} fill="white" /></span>
+              Lihat Program
+            </button>
+          </div>
+
+          {/* Social proof */}
+          <div className={styles.proof}>
+            <div className={styles.avatars}>
+              {['#FF5500','#818CF8','#4ADE80','#22D3EE','#FBBF24'].map((c, i) => (
+                <span key={i} className={styles.av} style={{ background: c, zIndex: 5 - i }}>
+                  {['R','S','D','A','F'][i]}
+                </span>
+              ))}
+            </div>
+            <div className={styles.proofText}>
+              <span><strong>50.000+</strong> pengguna di Indonesia</span>
+              <span className={styles.rating}>
+                {[...Array(5)].map((_, i) => <Star key={i} size={11} fill="#FBBF24" color="#FBBF24" />)}
+                <strong>4.9</strong><span>/5.0</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Stats row — floating at bottom of hero */}
+        <div className={styles.statsFloat}>
+          {[
+            { icon: <Users size={18} color="#00C9A7" />, val: '50K+', label: 'Active Users' },
+            { icon: <Dumbbell size={18} color="#F5A623" />, val: '500+', label: 'Programs' },
+            { icon: <Star size={18} fill="#FBBF24" color="#FBBF24" />, val: '4.9★', label: 'Rating' },
+            { icon: <Flame size={18} color="#FF5500" />, val: '100%', label: 'Tanpa Alat' },
+          ].map(s => (
+            <div key={s.label} className={styles.statFloatCard}>
+              {s.icon}
+              <div>
+                <div className={styles.statFloatVal}>{s.val}</div>
+                <div className={styles.statFloatLbl}>{s.label}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ════════════════ RECOMMENDED WORKOUTS ════════════════ */}
+      <section className={styles.recommendedSection}>
+        <div className={styles.recommendedHead}>
+          <div>
+            <span className={styles.eyebrow}>🏆 Pilihan Editor</span>
+            <h2 className={styles.recommendedTitle}>Recommended Workouts</h2>
+            <p className={styles.recommendedSub}>Program terpopuler yang dipilih oleh trainer kami</p>
+          </div>
+          <Link to="/program" className={styles.seeAll}>
+            Lihat Semua <ChevronRight size={16} />
+          </Link>
+        </div>
+
+        <div className={styles.workoutGrid}>
+          {RECOMMENDED.map((w) => (
+            <Link to={`/detail/${w.id}`} key={w.id} className={styles.workoutCard}>
+              {/* Photo */}
+              <div className={styles.cardPhoto}>
+                <img src={w.photo} alt={w.title}
+                  onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }} />
+                <div className={styles.cardPhotoFallback}>{w.emoji}</div>
+                <div className={styles.cardPhotoOverlay} />
+                <span className={styles.diffBadge} style={{ background: `${w.diffColor}20`, color: w.diffColor, borderColor: `${w.diffColor}50` }}>
+                  {w.difficulty}
+                </span>
+              </div>
+              {/* Body */}
+              <div className={styles.cardBody}>
+                <h4 className={styles.cardTitle}>{w.title}</h4>
+                <div className={styles.cardMeta}>
+                  <span className={styles.cardDuration}>
+                    <Clock size={13} /> {w.duration}
+                  </span>
+                  <span className={styles.cardArrow}>
+                    <ArrowRight size={15} />
+                  </span>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* ════════════════ HERO (original interactive) ════════════════ */}
       <section className={styles.hero}>
-        {/* Ambient glow layers */}
         <div className={styles.ambOrange} />
         <div className={styles.ambTeal}   />
         <div className={styles.gridBg}    />
 
         <div className={styles.heroGrid}>
-
           {/* ── LEFT ── */}
           <div className={styles.heroLeft}>
-
-            {/* Top Badge */}
             <div className={styles.topBadge}>
-              <span>🔥</span>
-              <span>#1 Platform Fitness Rumahan di Indonesia</span>
-              <span className={styles.badgeStarRow}>
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} size={10} fill="#FBBF24" color="#FBBF24" />
-                ))}
-              </span>
+              <span>✨</span>
+              <span>Fitur Premium FitLife</span>
             </div>
-
-            {/* Headline */}
             <h1 className={styles.headline}>
               Bentuk Tubuh<br />
               Impian dari Rumah.<br />
               <span className={styles.headlineGrad}>Tanpa&nbsp;Alat,<br />Hasil&nbsp;Maksimal.</span>
             </h1>
-
-            {/* Sub */}
             <p className={styles.sub}>
               Akses <strong>500+ program latihan</strong> HD terstruktur yang disesuaikan
               dengan tingkat kebugaranmu. Cukup <strong>15–30 menit sehari</strong>.
             </p>
-
-            {/* CTA Group */}
             <div className={styles.ctaRow}>
               <button type="button" className={styles.ctaPrimary}
                 onClick={() => navigate('/program')}>
                 Coba Gratis 14 Hari <ArrowRight size={17} />
               </button>
               <button type="button" className={styles.ctaGhost}
-                onClick={() => navigate('/program')}>
-                <span className={styles.playDot}><Play size={12} fill="white" /></span>
-                Lihat Demo Video
+                onClick={() => navigate('/kalkulator')}>
+                <BarChart2 size={15} /> Cek BMI Kamu
               </button>
-            </div>
-
-            {/* Social Proof */}
-            <div className={styles.proof}>
-              <div className={styles.avatars}>
-                {['#FF5500', '#818CF8', '#4ADE80', '#22D3EE', '#FBBF24'].map((c, i) => (
-                  <span key={i} className={styles.av}
-                    style={{ background: c, zIndex: 5 - i }}>
-                    {['R', 'S', 'D', 'A', 'F'][i]}
-                  </span>
-                ))}
-              </div>
-              <div className={styles.proofText}>
-                <span><strong>50.000+</strong> pengguna di Indonesia</span>
-                <span className={styles.rating}>
-                  {[...Array(5)].map((_, i) => <Star key={i} size={11} fill="#FBBF24" color="#FBBF24" />)}
-                  <strong>4.9</strong><span>/5.0</span>
-                </span>
-              </div>
             </div>
           </div>
 
@@ -157,13 +303,9 @@ export default function Beranda() {
             <div className={styles.centerGlow} />
             <div className={styles.orbitRing1} />
             <div className={styles.orbitRing2} />
-
-            {/* Athlete centerpiece */}
             <div className={styles.athleteBubble}>
               <span className={styles.athleteEmoji}>🏃‍♂️</span>
             </div>
-
-            {/* Card: Burn Rate (top-left) */}
             <div className={`${styles.fCard} ${styles.fCardBurn}`}>
               <div className={styles.fHeader}>
                 <Flame size={13} color="#FF5500" />
@@ -173,8 +315,6 @@ export default function Beranda() {
               <div className={styles.fBig}>320 <sub>Kcal</sub></div>
               <PulseBars />
             </div>
-
-            {/* Card: Program (top-right) */}
             <div className={`${styles.fCard} ${styles.fCardProg}`}>
               <div className={styles.fHeader}>
                 <Zap size={13} color="#818CF8" />
@@ -189,8 +329,6 @@ export default function Beranda() {
                 </div>
               </div>
             </div>
-
-            {/* Card: Heart Rate (bottom) */}
             <div className={`${styles.fCard} ${styles.fCardHR}`}>
               <div className={styles.fHeader}>
                 <Heart size={13} color="#4ADE80" />
@@ -219,15 +357,11 @@ export default function Beranda() {
         </div>
 
         <div className={styles.bentoGrid}>
-
-          {/* ── Card 1: AI Trainer (Large, 2 cols) ── */}
-          <div className={`${styles.bc} ${styles.bc1}`}
-            onMouseMove={handleTilt} onMouseLeave={resetTilt}>
+          <div className={`${styles.bc} ${styles.bc1}`} onMouseMove={handleTilt} onMouseLeave={resetTilt}>
             <div className={styles.bcBadge} style={{ color: '#818CF8' }}>
               <Brain size={13} /> AI Personal Trainer
             </div>
             <h3 className={styles.bcTitle}>Pelatih AI yang<br />Selalu Ada Untukmu</h3>
-
             <div className={styles.chatWrap}>
               {[
                 { role: 'ai',   text: 'Halo! Hari ini fokus **Upper Body**. Mulai dengan Push Up 3×12 💪' },
@@ -237,13 +371,10 @@ export default function Beranda() {
                 <div key={i} className={`${styles.msg} ${m.role === 'user' ? styles.msgUser : ''}`}>
                   {m.role === 'ai' && <span className={styles.aiAv}>🤖</span>}
                   <div className={`${styles.bubble} ${m.role === 'user' ? styles.bubbleUser : ''}`}
-                    dangerouslySetInnerHTML={{
-                      __html: m.text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                    }} />
+                    dangerouslySetInnerHTML={{ __html: m.text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
                 </div>
               ))}
             </div>
-
             <div className={styles.pills}>
               {['Push Up 3×12', 'Plank 3×30s', 'Tricep Dip 3×10'].map(p => (
                 <span key={p} className={styles.pill}>{p}</span>
@@ -251,14 +382,11 @@ export default function Beranda() {
             </div>
           </div>
 
-          {/* ── Card 2: Tanpa Alat ── */}
-          <div className={`${styles.bc} ${styles.bc2}`}
-            onMouseMove={handleTilt} onMouseLeave={resetTilt}>
+          <div className={`${styles.bc} ${styles.bc2}`} onMouseMove={handleTilt} onMouseLeave={resetTilt}>
             <div className={styles.bcBadge} style={{ color: '#FF5500' }}>
               <Dumbbell size={13} /> Tanpa Peralatan
             </div>
             <h3 className={styles.bcTitle}>Efektif di<br />Ruang Sempit</h3>
-
             <div className={styles.exGrid}>
               {[
                 { e: '💪', n: 'Push Up' },
@@ -272,18 +400,14 @@ export default function Beranda() {
                 </div>
               ))}
             </div>
-
             <div className={styles.greenBadge}>✓ 0 Peralatan Diperlukan</div>
           </div>
 
-          {/* ── Card 3: Komunitas ── */}
-          <div className={`${styles.bc} ${styles.bc3}`}
-            onMouseMove={handleTilt} onMouseLeave={resetTilt}>
+          <div className={`${styles.bc} ${styles.bc3}`} onMouseMove={handleTilt} onMouseLeave={resetTilt}>
             <div className={styles.bcBadge} style={{ color: '#22D3EE' }}>
               <Users size={13} /> Komunitas
             </div>
             <h3 className={styles.bcTitle}>Leaderboard<br />Harian</h3>
-
             <div className={styles.lb}>
               {[
                 { rank: 1, name: 'Sarah A.',  pts: 2840, color: '#FBBF24' },
@@ -297,22 +421,15 @@ export default function Beranda() {
                 </div>
               ))}
             </div>
-
-            <div className={styles.streakChip}>
-              <Award size={12} /> Streak 7 Hari 🔥
-            </div>
+            <div className={styles.streakChip}><Award size={12} /> Streak 7 Hari 🔥</div>
           </div>
 
-          {/* ── Card 4: Kalori (2 cols) ── */}
-          <div className={`${styles.bc} ${styles.bc4}`}
-            onMouseMove={handleTilt} onMouseLeave={resetTilt}>
+          <div className={`${styles.bc} ${styles.bc4}`} onMouseMove={handleTilt} onMouseLeave={resetTilt}>
             <div className={styles.bcBadge} style={{ color: '#4ADE80' }}>
               <Target size={13} /> Pelacak Kalori Otomatis
             </div>
             <h3 className={styles.bcTitle}>Kalori Terbakar Hari Ini</h3>
-
             <div className={styles.kcRow}>
-              {/* Ring */}
               <div className={styles.kcRingWrap}>
                 <Ring pct={68} color="#4ADE80" size={110} stroke={7} />
                 <div className={styles.kcCenter}>
@@ -320,8 +437,6 @@ export default function Beranda() {
                   <span className={styles.kcUnit}>kkal</span>
                 </div>
               </div>
-
-              {/* Stats */}
               <div className={styles.kcStats}>
                 {[
                   { label: 'Target Harian',  val: '1.800 kkal', c: '#4ADE80' },
@@ -335,8 +450,6 @@ export default function Beranda() {
                   </div>
                 ))}
               </div>
-
-              {/* Mini breakdown bars */}
               <div className={styles.kcBars}>
                 {[
                   { label: 'Kardio',     pct: 68, c: '#FF5500' },
@@ -346,8 +459,7 @@ export default function Beranda() {
                   <div key={b.label} className={styles.kcBarItem}>
                     <span className={styles.kcBarLabel}>{b.label}</span>
                     <div className={styles.kcBarTrack}>
-                      <div className={styles.kcBarFill}
-                        style={{ width: `${b.pct}%`, background: b.c }} />
+                      <div className={styles.kcBarFill} style={{ width: `${b.pct}%`, background: b.c }} />
                     </div>
                     <span className={styles.kcBarPct} style={{ color: b.c }}>{b.pct}%</span>
                   </div>
@@ -355,7 +467,6 @@ export default function Beranda() {
               </div>
             </div>
           </div>
-
         </div>
       </section>
 
