@@ -1,36 +1,38 @@
 import { useState, useEffect } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { Flame, Menu, X, LogOut } from 'lucide-react';
+import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
+import { Zap, Menu, X, LogOut } from 'lucide-react';
 import styles from './Navbar.module.css';
 
 const LINKS = [
-  { to: '/program',    label: 'Program'    },
-  { to: '/jadwal',     label: 'Jadwal'     },
-  { to: '/kalkulator', label: 'Kalkulator' },
-  { to: '/komunitas',  label: 'Komunitas'  },
-  { to: '/harga',      label: 'Harga'      },
+  { to: '/',           label: 'Home'       },
+  { to: '/program',    label: 'Programs'   },
+  { to: '/kalkulator', label: 'Calculator' },
+  { to: '/komunitas',  label: 'Community'  },
+  { to: '/harga',      label: 'Pricing'    },
 ];
 
 export default function Navbar() {
-  const [open, setOpen] = useState(false);
-  const [user, setUser] = useState(null);
-  const navigate = useNavigate();
-
+  const [open, setOpen]   = useState(false);
+  const [user, setUser]   = useState(null);
+  const [scrolled, setScrolled] = useState(false);
+  const navigate  = useNavigate();
+  const location  = useLocation();
   const close = () => setOpen(false);
 
   useEffect(() => {
     const checkUser = () => {
-      const storedUser = localStorage.getItem('fitlife_user');
-      if (storedUser) {
-        setUser(JSON.parse(storedUser));
-      } else {
-        setUser(null);
-      }
+      const s = localStorage.getItem('fitlife_user');
+      setUser(s ? JSON.parse(s) : null);
     };
     checkUser();
-    // Biar navbar update otomatis setelah login tanpa refresh manual
     window.addEventListener('storage', checkUser);
     return () => window.removeEventListener('storage', checkUser);
+  }, []);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   const handleLogout = () => {
@@ -40,44 +42,42 @@ export default function Navbar() {
   };
 
   return (
-    <nav className={styles.nav}>
-      <div className={styles.inner}>
+    <header className={styles.header}>
+      <nav className={`${styles.pill} ${scrolled ? styles.pillScrolled : ''}`}>
 
-        {/* Logo */}
+        {/* ── Logo ── */}
         <Link to="/" className={styles.logo} onClick={close}>
-          <span className={styles.flameWrap}>
-            <Flame size={18} className={styles.flameIcon} />
-          </span>
+          <span className={styles.logoIcon}><Zap size={16} fill="white" color="white" /></span>
           <span className={styles.logoTxt}>FitLife</span>
-          <span className={styles.logoSub}>Indonesia</span>
         </Link>
 
-        {/* Center Links */}
+        {/* ── Center Links (desktop) ── */}
         <ul className={`${styles.links} ${open ? styles.linksOpen : ''}`}>
           {LINKS.map(({ to, label }) => (
             <li key={label}>
-              <NavLink to={to}
+              <NavLink
+                to={to}
+                end={to === '/'}
                 className={({ isActive }) =>
-                  isActive && to !== '/'
-                    ? `${styles.link} ${styles.linkActive}`
-                    : styles.link
+                  isActive ? `${styles.link} ${styles.linkActive}` : styles.link
                 }
-                onClick={close} end={to === '/'}>
+                onClick={close}>
                 {label}
               </NavLink>
             </li>
           ))}
-          {/* Mobile-only auth links */}
+
+          {/* Mobile-only auth */}
           {!user && (
             <>
-              <li className={styles.mobileAuthDivider} />
-              <li><Link to="/login" className={styles.link} onClick={close}>Login</Link></li>
-              <li><Link to="/register" className={`${styles.link} ${styles.mobileStartBtn}`} onClick={close}>Mulai Gratis →</Link></li>
+              <li className={styles.mobileDivider} />
+              <li><Link to="/login"    className={styles.link} onClick={close}>Login</Link></li>
+              <li><Link to="/register" className={`${styles.link} ${styles.mobileGreen}`} onClick={close}>Mulai Latihan</Link></li>
             </>
           )}
           {user && (
             <>
-              <li className={styles.mobileAuthDivider} />
+              <li className={styles.mobileDivider} />
               <li>
                 <button onClick={() => { handleLogout(); close(); }} className={`${styles.link} ${styles.mobileLogout}`}>
                   Keluar dari akun
@@ -87,42 +87,33 @@ export default function Navbar() {
           )}
         </ul>
 
-        {/* Right Actions */}
+        {/* ── Right: CTA / User ── */}
         <div className={styles.actions}>
           {user ? (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#fff', fontSize: '0.9rem', fontWeight: 'bold' }}>
-                <div style={{ width: '34px', height: '34px', borderRadius: '50%', background: 'linear-gradient(135deg, #FF5500, #FF2A00)', display: 'flex', alignItems: 'center', justifyContent: 'center', textTransform: 'uppercase', overflow: 'hidden' }}>
-                  {user.picture ? (
-                    <img src={user.picture} alt={user.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} referrerPolicy="no-referrer" />
-                  ) : (
-                    user.name?.charAt(0) || user.email?.charAt(0) || 'U'
-                  )}
-                </div>
-                {user.name || user.email?.split('@')[0]}
+            <div className={styles.userRow}>
+              <div className={styles.avatar}>
+                {user.picture
+                  ? <img src={user.picture} alt={user.name} referrerPolicy="no-referrer" />
+                  : <span>{user.name?.charAt(0) || 'U'}</span>}
               </div>
-              <button onClick={handleLogout} className={styles.loginBtn} style={{ background: 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' }}>
-                <LogOut size={16} /> Keluar
+              <span className={styles.userName}>{user.name?.split(' ')[0]}</span>
+              <button onClick={handleLogout} className={styles.logoutBtn} title="Keluar">
+                <LogOut size={15} />
               </button>
             </div>
           ) : (
             <>
-              <Link to="/login" className={styles.loginBtn} onClick={close}>Login</Link>
-              <Link to="/program" className={styles.startBtn} onClick={close}>
-                Mulai Gratis →
-              </Link>
+              <Link to="/login" className={styles.loginLink}>Login</Link>
+              <Link to="/register" className={styles.ctaBtn}>Mulai Latihan</Link>
             </>
           )}
         </div>
 
-        {/* Hamburger */}
-        <button className={styles.burger} type="button"
-          onClick={() => setOpen(p => !p)}
-          aria-label={open ? 'Tutup menu' : 'Buka menu'}>
+        {/* ── Hamburger ── */}
+        <button className={styles.burger} onClick={() => setOpen(p => !p)} type="button">
           {open ? <X size={20} /> : <Menu size={20} />}
         </button>
-
-      </div>
-    </nav>
+      </nav>
+    </header>
   );
 }
