@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import {
   ArrowRight, Play, Star, Clock, Flame,
   Dumbbell, Users, Zap, ChevronRight,
-  Activity, Brain, Award, Target
+  Activity, Brain, Award, Target, ShieldCheck
 } from 'lucide-react';
 import styles from './Beranda.module.css';
 
