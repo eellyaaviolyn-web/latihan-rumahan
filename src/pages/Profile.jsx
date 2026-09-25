@@ -92,25 +92,38 @@ const RECENT_SESSIONS = [
 export default function Profile() {
   const navigate = useNavigate();
   const toast = useToast();
+
+  /* Selalu ada user karena halaman ini dilindungi ProtectedRoute */
   const [user, setUser] = useState(() => {
     const s = localStorage.getItem('fitlife_user');
-    return s ? JSON.parse(s) : { name: 'Alex Pradipta', email: 'alex.athlete@fitlife.id' };
+    return s ? JSON.parse(s) : null;
   });
 
-  // Sinkronisasi jika localStorage berubah (misalnya login/logout di tab lain)
+  // Sinkronisasi jika localStorage berubah (misalnya login di tab lain)
   useEffect(() => {
     const onStorage = () => {
       const s = localStorage.getItem('fitlife_user');
       if (s) setUser(JSON.parse(s));
+      else navigate('/login', { replace: true }); // logout di tab lain
     };
     window.addEventListener('storage', onStorage);
-    return () => window.removeEventListener('storage', onStorage);
-  }, []);
+    window.addEventListener('fitlife:login', onStorage);
+    return () => {
+      window.removeEventListener('storage', onStorage);
+      window.removeEventListener('fitlife:login', onStorage);
+    };
+  }, [navigate]);
 
   const handleShare = () => {
     navigator.clipboard?.writeText(window.location.href);
     toast('Tautan profil & Trophy Vault disalin ke clipboard!', 'success');
   };
+
+  /* Jika user null (seharusnya tidak terjadi karena ProtectedRoute) */
+  if (!user) return null;
+
+  /* Tanggal bergabung berdasarkan bulan saat ini */
+  const joinMonth = new Date().toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
 
   return (
     <div className={styles.page}>
@@ -123,29 +136,29 @@ export default function Profile() {
           <div className={styles.identityRow}>
             <div className={styles.avatarWrapper}>
               <div className={styles.avatarImg}>
-                {user?.picture ? (
-                  <img src={user.picture} alt={user.name} />
+                {user.picture ? (
+                  <img src={user.picture} alt={user.name} referrerPolicy="no-referrer" />
                 ) : (
-                  <span>{user?.name?.charAt(0) || 'A'}</span>
+                  <span>{user.name?.charAt(0)?.toUpperCase() || 'U'}</span>
                 )}
               </div>
-              <span className={styles.proPill}>PRO ATHLETE</span>
+              <span className={styles.proPill}>MEMBER</span>
             </div>
 
             <div className={styles.identityDetails}>
               <div className={styles.nameBadges}>
-                <h1 className={styles.userName}>{user?.name || 'Alex Pradipta'}</h1>
+                <h1 className={styles.userName}>{user.name}</h1>
                 <span className={styles.verifiedBadge}>
-                  <ShieldCheck size={14} /> AI Biomechanics Verified
+                  <ShieldCheck size={14} /> FitLife Verified
                 </span>
               </div>
-              <p className={styles.userEmail}>{user?.email || 'alex.athlete@fitlife.id'}</p>
+              <p className={styles.userEmail}>{user.email}</p>
               <div className={styles.metaChips}>
-                <span>🇮🇩 Jakarta, ID</span>
+                <span>🇮🇩 Indonesia</span>
                 <span>•</span>
-                <span>Tier: <strong>Titan Pro</strong></span>
+                <span>Tier: <strong>Free</strong></span>
                 <span>•</span>
-                <span>Member Sejak: <strong>Jan 2026</strong></span>
+                <span>Member Sejak: <strong>{joinMonth}</strong></span>
               </div>
             </div>
 

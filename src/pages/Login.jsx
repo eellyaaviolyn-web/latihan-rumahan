@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Flame, Mail, Lock, ArrowRight, Loader2 } from 'lucide-react';
 import { useGoogleLogin } from '@react-oauth/google';
 import styles from './Login.module.css';
@@ -11,18 +11,28 @@ const STATS = [
 ];
 
 export default function Login() {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const redirectTo = searchParams.get('redirect') || '/program';
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+
+  const doLogin = (userData) => {
+    localStorage.setItem('fitlife_user', JSON.stringify(userData));
+    window.dispatchEvent(new Event('fitlife:login'));
+    navigate(redirectTo, { replace: true });
+  };
 
   const handleLogin = (e) => {
     e.preventDefault();
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-      localStorage.setItem('fitlife_user', JSON.stringify({ name: email.split('@')[0], email }));
-      window.location.href = '/program';
+      const name = email.split('@')[0];
+      doLogin({ name: name.charAt(0).toUpperCase() + name.slice(1), email });
     }, 1500);
   };
 
@@ -32,8 +42,7 @@ export default function Login() {
         const userInfo = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
           headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
         }).then(res => res.json());
-        localStorage.setItem('fitlife_user', JSON.stringify({ name: userInfo.name, email: userInfo.email, picture: userInfo.picture }));
-        window.location.href = '/program';
+        doLogin({ name: userInfo.name, email: userInfo.email, picture: userInfo.picture });
       } catch { setIsGoogleLoading(false); }
     },
     onError: () => setIsGoogleLoading(false),

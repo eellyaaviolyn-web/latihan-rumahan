@@ -1,34 +1,46 @@
 import { useState, useEffect } from 'react';
-import { Link, NavLink } from 'react-router-dom';
-import { Zap, Menu, X, LogOut } from 'lucide-react';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Zap, Menu, X, LogOut, LayoutDashboard } from 'lucide-react';
 import styles from './Navbar.module.css';
 
-const LINKS = [
-  { to: '/',           label: 'Home'       },
-  { to: '/ai-studio',  label: 'Studio AI', isLive: true },
-  { to: '/program',    label: 'Programs'   },
-  { to: '/kalkulator', label: 'Calculator' },
-  { to: '/komunitas',  label: 'Community'  },
-  { to: '/harga',      label: 'Pricing'    },
-  { to: '/profil',     label: 'Trophy'     },
+/* ── Link list sesuai status login ── */
+const PUBLIC_LINKS = [
+  { to: '/',      label: 'Dashboard', icon: <LayoutDashboard size={13} /> },
+  { to: '/harga', label: 'Pricing'   },
+];
+
+const APP_LINKS = [
+  { to: '/program',    label: 'Programs'                  },
+  { to: '/ai-studio',  label: 'Studio AI', isLive: true   },
+  { to: '/kalkulator', label: 'Calculator'                 },
+  { to: '/komunitas',  label: 'Community'                  },
+  { to: '/jadwal',     label: 'Schedule'                   },
 ];
 
 export default function Navbar() {
-  const [open, setOpen]   = useState(false);
-  const [user, setUser]   = useState(null);
+  const [open, setOpen]       = useState(false);
+  const [user, setUser]       = useState(null);
   const [scrolled, setScrolled] = useState(false);
+  const navigate = useNavigate();
   const close = () => setOpen(false);
 
+  /* Sync user dari localStorage */
   useEffect(() => {
-    const checkUser = () => {
+    const syncUser = () => {
       const s = localStorage.getItem('fitlife_user');
       setUser(s ? JSON.parse(s) : null);
     };
-    checkUser();
-    window.addEventListener('storage', checkUser);
-    return () => window.removeEventListener('storage', checkUser);
+    syncUser();
+    window.addEventListener('storage', syncUser);
+    /* Tangkap event custom dari Login/Register */
+    window.addEventListener('fitlife:login', syncUser);
+    return () => {
+      window.removeEventListener('storage', syncUser);
+      window.removeEventListener('fitlife:login', syncUser);
+    };
   }, []);
 
+  /* Scroll shadow */
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', onScroll);
@@ -38,8 +50,11 @@ export default function Navbar() {
   const handleLogout = () => {
     localStorage.removeItem('fitlife_user');
     setUser(null);
-    window.location.href = '/';
+    close();
+    navigate('/');
   };
+
+  const LINKS = user ? APP_LINKS : PUBLIC_LINKS;
 
   return (
     <header className={styles.header}>
@@ -69,19 +84,18 @@ export default function Navbar() {
           ))}
 
           {/* Mobile-only auth */}
-          {!user && (
+          {!user ? (
             <>
               <li className={styles.mobileDivider} />
               <li><Link to="/login"    className={styles.link} onClick={close}>Login</Link></li>
-              <li><Link to="/register" className={`${styles.link} ${styles.mobileGreen}`} onClick={close}>Mulai Latihan</Link></li>
+              <li><Link to="/register" className={`${styles.link} ${styles.mobileGreen}`} onClick={close}>Daftar Gratis</Link></li>
             </>
-          )}
-          {user && (
+          ) : (
             <>
               <li className={styles.mobileDivider} />
               <li><Link to="/profil" className={styles.link} onClick={close}>Profil & Trophy Vault</Link></li>
               <li>
-                <button onClick={() => { handleLogout(); close(); }} className={`${styles.link} ${styles.mobileLogout}`}>
+                <button onClick={handleLogout} className={`${styles.link} ${styles.mobileLogout}`}>
                   Keluar dari akun
                 </button>
               </li>
@@ -93,11 +107,11 @@ export default function Navbar() {
         <div className={styles.actions}>
           {user ? (
             <div className={styles.userRow}>
-              <Link to="/profil" className={styles.userProfileLink} title="Buka Profil & Trophy Vault">
+              <Link to="/profil" className={styles.userProfileLink} title="Profil & Trophy Vault">
                 <div className={styles.avatar}>
                   {user.picture
                     ? <img src={user.picture} alt={user.name} referrerPolicy="no-referrer" />
-                    : <span>{user.name?.charAt(0) || 'U'}</span>}
+                    : <span>{user.name?.charAt(0)?.toUpperCase() || 'U'}</span>}
                 </div>
                 <span className={styles.userName}>{user.name?.split(' ')[0]}</span>
               </Link>
@@ -107,8 +121,8 @@ export default function Navbar() {
             </div>
           ) : (
             <>
-              <Link to="/login" className={styles.loginLink}>Login</Link>
-              <Link to="/ai-studio" className={styles.ctaBtn}>Mulai Studio AI</Link>
+              <Link to="/login"    className={styles.loginLink}>Login</Link>
+              <Link to="/register" className={styles.ctaBtn}>Daftar Gratis</Link>
             </>
           )}
         </div>

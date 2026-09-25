@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import {
   ArrowRight, Play, Star, Clock, Flame,
   Dumbbell, Users, Zap, ChevronRight,
-  Activity, Brain, Award, Target, ShieldCheck
+  Activity, Brain, Award, Target, ShieldCheck, Lock
 } from 'lucide-react';
 import styles from './Beranda.module.css';
 
@@ -107,6 +107,25 @@ export default function Beranda() {
   const tilt = useTilt(12);
   const [heroImgError, setHeroImgError] = useState(false);
 
+  /* Cek login status */
+  const isLoggedIn = Boolean(localStorage.getItem('fitlife_user'));
+
+  /* Handler klik program — redirect ke login jika belum masuk */
+  const handleProgramClick = (e, programId) => {
+    if (!isLoggedIn) {
+      e.preventDefault();
+      navigate(`/login?redirect=${encodeURIComponent(`/detail/${programId}`)}`);
+    }
+  };
+
+  const handleSeeAllPrograms = () => {
+    if (isLoggedIn) {
+      navigate('/program');
+    } else {
+      navigate('/login?redirect=%2Fprogram');
+    }
+  };
+
   return (
     <div className={styles.page}>
       {/* ═══════════════════ HERO ═══════════════════ */}
@@ -155,15 +174,31 @@ export default function Beranda() {
 
             {/* CTA */}
             <div className={styles.ctaRow}>
-              <button className={styles.ctaPrimary} onClick={() => navigate('/ai-studio')}>
-                <Zap size={17} />
-                Buka Live AI Studio HUD
-                <ArrowRight size={17} />
-              </button>
-              <button className={styles.ctaGhost} onClick={() => navigate('/program')}>
-                <Dumbbell size={15} />
-                Jelajahi Program
-              </button>
+              {isLoggedIn ? (
+                <>
+                  <button className={styles.ctaPrimary} onClick={() => navigate('/program')}>
+                    <Dumbbell size={17} />
+                    Buka Dashboard Latihan
+                    <ArrowRight size={17} />
+                  </button>
+                  <button className={styles.ctaGhost} onClick={() => navigate('/ai-studio')}>
+                    <Zap size={15} />
+                    AI Studio HUD
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button className={styles.ctaPrimary} onClick={() => navigate('/register')}>
+                    <Zap size={17} />
+                    Daftar Gratis Sekarang
+                    <ArrowRight size={17} />
+                  </button>
+                  <button className={styles.ctaGhost} onClick={handleSeeAllPrograms}>
+                    <Dumbbell size={15} />
+                    Lihat Program
+                  </button>
+                </>
+              )}
             </div>
 
             {/* Avatars + social proof */}
@@ -246,20 +281,32 @@ export default function Beranda() {
         </div>
       </section>
 
-      {/* ═══════════════════ FEATURE GRID ═══════════════════ */}
+      {/* ═══════════════════ PROGRAM SECTION ═══════════════════ */}
       <section className={styles.programSection}>
         <div className={styles.sectionHead}>
           <span className={styles.sectionEyebrow}>Program Pilihan</span>
           <h2 className={styles.sectionTitle}>
             Mulai dari yang <span className={styles.textEmerald}>Kamu Suka</span>
           </h2>
-          <p className={styles.sectionSub}>Dipilih oleh trainer berpengalaman, cocok untuk semua level.</p>
+          <p className={styles.sectionSub}>
+            Dipilih oleh trainer berpengalaman, cocok untuk semua level.
+            {!isLoggedIn && (
+              <span style={{ display: 'block', marginTop: 6, color: '#10b981', fontSize: '0.85rem', fontWeight: 600 }}>
+                🔐 Login untuk mengakses semua program
+              </span>
+            )}
+          </p>
         </div>
 
         {/* Top 3 big cards */}
         <div className={styles.programGrid}>
           {PROGRAMS.map((p) => (
-            <Link to={`/detail/${p.id}`} key={p.id} className={styles.programCard}>
+            <Link
+              to={`/detail/${p.id}`}
+              key={p.id}
+              className={styles.programCard}
+              onClick={(e) => handleProgramClick(e, p.id)}
+            >
               <div className={styles.pCardPhoto}>
                 <img src={p.photo} alt={p.title}
                   onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }} />
@@ -269,9 +316,17 @@ export default function Beranda() {
                   style={{ color: p.diffColor, background: `${p.diffColor}15`, borderColor: `${p.diffColor}40` }}>
                   {p.difficulty}
                 </span>
-                <button className={styles.pPlayBtn} onClick={(e) => { e.preventDefault(); navigate(`/detail/${p.id}`); }}>
-                  <Play size={14} fill="white" />
-                </button>
+                {/* Lock overlay untuk guest */}
+                {!isLoggedIn ? (
+                  <div className={styles.pLockOverlay}>
+                    <Lock size={20} color="#fff" />
+                    <span>Login untuk mulai</span>
+                  </div>
+                ) : (
+                  <button className={styles.pPlayBtn} onClick={(e) => { e.preventDefault(); navigate(`/detail/${p.id}`); }}>
+                    <Play size={14} fill="white" />
+                  </button>
+                )}
               </div>
               <div className={styles.pCardBody}>
                 <h4 className={styles.pCardTitle}>{p.title}</h4>
@@ -284,10 +339,15 @@ export default function Beranda() {
           ))}
         </div>
 
-        {/* All programs grid */}
+        {/* All programs list */}
         <div className={styles.allGrid}>
           {ALL_PROGRAMS.map((p) => (
-            <Link to={`/detail/${p.id}`} key={p.id} className={styles.allCard}>
+            <Link
+              to={`/detail/${p.id}`}
+              key={p.id}
+              className={styles.allCard}
+              onClick={(e) => handleProgramClick(e, p.id)}
+            >
               <div className={styles.allCardLeft}>
                 <div className={styles.allCardEmoji}>{p.emoji}</div>
                 <div>
@@ -299,15 +359,18 @@ export default function Beranda() {
                   </div>
                 </div>
               </div>
-              <ChevronRight size={16} color="#475569" />
+              {!isLoggedIn
+                ? <Lock size={14} color="#10b981" />
+                : <ChevronRight size={16} color="#475569" />}
             </Link>
           ))}
         </div>
 
         <div className={styles.seeAllRow}>
-          <Link to="/program" className={styles.seeAllBtn}>
-            Lihat Semua Program <ArrowRight size={16} />
-          </Link>
+          <button className={styles.seeAllBtn} onClick={handleSeeAllPrograms}>
+            {isLoggedIn ? 'Lihat Semua Program' : '🔐 Login & Lihat Semua Program'}
+            <ArrowRight size={16} />
+          </button>
         </div>
       </section>
 
@@ -347,12 +410,25 @@ export default function Beranda() {
             Bergabung bersama <strong>50.000+</strong> pengguna aktif.
           </p>
           <div className={styles.ctaRow}>
-            <button className={styles.ctaPrimary} onClick={() => navigate('/register')}>
-              Daftar Gratis Sekarang <ArrowRight size={17} />
-            </button>
-            <button className={styles.ctaGhost} onClick={() => navigate('/program')}>
-              <Dumbbell size={15} /> Jelajahi Program
-            </button>
+            {isLoggedIn ? (
+              <>
+                <button className={styles.ctaPrimary} onClick={() => navigate('/program')}>
+                  <Dumbbell size={17} /> Lanjutkan Latihan <ArrowRight size={17} />
+                </button>
+                <button className={styles.ctaGhost} onClick={() => navigate('/profil')}>
+                  🏆 Lihat Trophy Vault
+                </button>
+              </>
+            ) : (
+              <>
+                <button className={styles.ctaPrimary} onClick={() => navigate('/register')}>
+                  Daftar Gratis Sekarang <ArrowRight size={17} />
+                </button>
+                <button className={styles.ctaGhost} onClick={() => navigate('/login')}>
+                  <Dumbbell size={15} /> Sudah punya akun? Login
+                </button>
+              </>
+            )}
           </div>
         </div>
       </section>
