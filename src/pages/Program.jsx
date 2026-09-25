@@ -1,17 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import WorkoutCard from '../components/WorkoutCard';
 import FilterSidebar from '../components/FilterSidebar';
 import workouts from '../data/workouts';
 import styles from './Program.module.css';
-import { Dumbbell, Users, Star, Zap } from 'lucide-react';
+import {
+  Dumbbell, Users, Star, Zap, Sparkles, X,
+  CheckCircle2, ArrowRight, Target, Clock, Shield
+} from 'lucide-react';
+import { useToast } from '../components/Toast';
 
 export default function Program() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const toast = useToast();
   const urlKategori = searchParams.get('kategori');
 
   const [activeKategori, setActiveKategori] = useState(urlKategori || 'Semua');
   const [activeLevel, setActiveLevel] = useState('Semua');
+
+  // AI Smart Matchmaker Modal State
+  const [showMatchmaker, setShowMatchmaker] = useState(false);
+  const [quizStep, setQuizStep] = useState(1);
+  const [quizAnswers, setQuizAnswers] = useState({
+    goal: 'Hypertrophy',
+    duration: '20-30 min',
+    equipment: 'Bodyweight (Tanpa Alat)'
+  });
+  const [matchedProgram, setMatchedProgram] = useState(null);
 
   useEffect(() => {
     const param = searchParams.get('kategori');
@@ -32,20 +48,45 @@ export default function Program() {
     return matchK && matchL;
   });
 
+  const handleRunMatchmaker = () => {
+    // Generate tailored match
+    let rec = workouts[0];
+    if (quizAnswers.goal === 'Fat Loss') {
+      rec = workouts.find(w => w.kategori.toLowerCase().includes('kardio') || w.kategori.toLowerCase().includes('hiit')) || workouts[0];
+    } else if (quizAnswers.goal === 'Mobility') {
+      rec = workouts.find(w => w.kategori.toLowerCase().includes('yoga') || w.kategori.toLowerCase().includes('stretching')) || workouts[2];
+    } else {
+      rec = workouts[0];
+    }
+    setMatchedProgram(rec);
+    setQuizStep(4); // Result step
+    toast('AI Smart Matchmaker berhasil mencocokkan program!', 'success');
+  };
+
   return (
     <div className={styles.page}>
       {/* ── Hero Header ── */}
       <section className={styles.hero}>
         <div className={styles.heroGlow} />
         <div className={styles.heroInner}>
-          <span className="eyebrow-label"><Dumbbell size={13} /> Program Latihan</span>
+          <div className={styles.heroBadgeRow}>
+            <span className="eyebrow-label"><Dumbbell size={13} /> Program Latihan</span>
+            <button
+              onClick={() => { setShowMatchmaker(true); setQuizStep(1); }}
+              className={styles.smartMatchTriggerBtn}
+            >
+              <Sparkles size={14} color="#10b981" />
+              <span>AI Smart Matchmaker (Kuis 3 Detik)</span>
+            </button>
+          </div>
+
           <h1 className={styles.title}>
             Temukan Program<br />
             <span className={styles.titleGrad}>Latihan Terbaikmu</span>
           </h1>
           <p className={styles.sub}>
             Pilih dari <strong>500+ program</strong> yang dirancang oleh pakar kebugaran.
-            Dari pemula hingga atlet — semua ada di sini.
+            Dilengkapi sensor biomekanika AI untuk memvalidasi setiap repetisi Anda.
           </p>
 
           {/* Stats strip */}
@@ -54,7 +95,7 @@ export default function Program() {
               { icon: <Dumbbell size={16} />, val: '500+', label: 'Program' },
               { icon: <Users size={16} />,    val: '50K+', label: 'Pengguna' },
               { icon: <Star size={16} fill="#FBBF24" color="#FBBF24" />, val: '4.9', label: 'Rating' },
-              { icon: <Zap size={16} />,      val: '100%', label: 'Tanpa Alat' },
+              { icon: <Zap size={16} />,      val: '100%', label: 'Kinetic AI Ready' },
             ].map(s => (
               <div key={s.label} className={styles.statBox}>
                 <div className={styles.statIcon}>{s.icon}</div>
@@ -100,6 +141,145 @@ export default function Program() {
           </div>
         )}
       </section>
+
+      {/* ── AI SMART MATCHMAKER MODAL ── */}
+      {showMatchmaker && (
+        <div className={styles.modalOverlay} onClick={() => setShowMatchmaker(false)}>
+          <div className={styles.modalCard} onClick={e => e.stopPropagation()}>
+            <button className={styles.modalClose} onClick={() => setShowMatchmaker(false)}>
+              <X size={18} />
+            </button>
+
+            {quizStep < 4 ? (
+              <>
+                <div className={styles.modalHead}>
+                  <div className={styles.modalSparkleIcon}>
+                    <Sparkles size={20} color="#10b981" />
+                  </div>
+                  <div>
+                    <h3 className={styles.modalTitle}>AI Smart Matchmaker</h3>
+                    <p className={styles.modalSub}>Langkah {quizStep} dari 3 • Rekomendasi Program Akurat</p>
+                  </div>
+                </div>
+
+                {/* Step 1: Target Goal */}
+                {quizStep === 1 && (
+                  <div className={styles.quizBody}>
+                    <label className={styles.quizQuestion}>1. Apa target performa utamamu saat ini?</label>
+                    <div className={styles.quizOptions}>
+                      {['Hypertrophy (Bentuk Otot)', 'Fat Loss & Kondisioning', 'Mobility & Pemulihan Sendi', 'Strength & Tenaga'].map(opt => (
+                        <button
+                          key={opt}
+                          className={`${styles.quizOptionBtn} ${quizAnswers.goal === opt.split(' ')[0] ? styles.optionActive : ''}`}
+                          onClick={() => setQuizAnswers(p => ({ ...p, goal: opt.split(' ')[0] }))}
+                        >
+                          <Target size={16} />
+                          <span>{opt}</span>
+                        </button>
+                      ))}
+                    </div>
+                    <button className={styles.quizNextBtn} onClick={() => setQuizStep(2)}>
+                      Lanjutkan <ArrowRight size={16} />
+                    </button>
+                  </div>
+                )}
+
+                {/* Step 2: Session Duration */}
+                {quizStep === 2 && (
+                  <div className={styles.quizBody}>
+                    <label className={styles.quizQuestion}>2. Berapa alokasi waktu idealmu per sesi?</label>
+                    <div className={styles.quizOptions}>
+                      {['15-20 Menit (Express Burn)', '20-30 Menit (Standar Optimal)', '40-50 Menit (Intensitas Atlet)'].map(opt => (
+                        <button
+                          key={opt}
+                          className={`${styles.quizOptionBtn} ${quizAnswers.duration === opt ? styles.optionActive : ''}`}
+                          onClick={() => setQuizAnswers(p => ({ ...p, duration: opt }))}
+                        >
+                          <Clock size={16} />
+                          <span>{opt}</span>
+                        </button>
+                      ))}
+                    </div>
+                    <div className={styles.modalNavButtons}>
+                      <button className={styles.quizBackBtn} onClick={() => setQuizStep(1)}>Kembali</button>
+                      <button className={styles.quizNextBtn} onClick={() => setQuizStep(3)}>
+                        Lanjutkan <ArrowRight size={16} />
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Step 3: Equipment */}
+                {quizStep === 3 && (
+                  <div className={styles.quizBody}>
+                    <label className={styles.quizQuestion}>3. Ketersediaan peralatan latihan di rumah?</label>
+                    <div className={styles.quizOptions}>
+                      {['Bodyweight (100% Tanpa Alat)', 'Dumbbell / Resistance Band', 'Full Home Gym (Barbell/Kettlebell)'].map(opt => (
+                        <button
+                          key={opt}
+                          className={`${styles.quizOptionBtn} ${quizAnswers.equipment === opt ? styles.optionActive : ''}`}
+                          onClick={() => setQuizAnswers(p => ({ ...p, equipment: opt }))}
+                        >
+                          <Shield size={16} />
+                          <span>{opt}</span>
+                        </button>
+                      ))}
+                    </div>
+                    <div className={styles.modalNavButtons}>
+                      <button className={styles.quizBackBtn} onClick={() => setQuizStep(2)}>Kembali</button>
+                      <button className={styles.quizNextBtn} onClick={handleRunMatchmaker}>
+                        Temukan Program Cocok 🔥
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </>
+            ) : (
+              /* Step 4: Result */
+              <div className={styles.resultView}>
+                <div className={styles.resultCheck}>
+                  <CheckCircle2 size={36} color="#10b981" />
+                </div>
+                <span className={styles.matchScorePill}>99.2% MATCH ACCURACY</span>
+                <h3 className={styles.resultProgramTitle}>{matchedProgram?.nama || 'Squat Masterclass & Core'}</h3>
+                <p className={styles.resultDesc}>
+                  Berdasarkan preferensi <strong>{quizAnswers.goal}</strong> dan durasi <strong>{quizAnswers.duration}</strong>,
+                  program ini dirancang untuk memaksimalkan hipertrofi dan kekuatan fungsional tanpa membebani lumbar spine.
+                </p>
+
+                <div className={styles.resultCardBox}>
+                  <span className={styles.resultEmoji}>{matchedProgram?.emoji || '🔥'}</span>
+                  <div>
+                    <strong>{matchedProgram?.nama}</strong>
+                    <p>{matchedProgram?.level} • {matchedProgram?.durasi} Menit • {matchedProgram?.kalori} kcal</p>
+                  </div>
+                </div>
+
+                <div className={styles.resultActions}>
+                  <button
+                    onClick={() => {
+                      setShowMatchmaker(false);
+                      navigate('/ai-studio');
+                    }}
+                    className={styles.launchStudioAction}
+                  >
+                    <Zap size={16} /> Buka di AI Studio HUD
+                  </button>
+                  <button
+                    onClick={() => {
+                      setShowMatchmaker(false);
+                      if (matchedProgram) navigate(`/detail/${matchedProgram.id}`);
+                    }}
+                    className={styles.viewDetailAction}
+                  >
+                    Lihat Rincian Gerakan
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

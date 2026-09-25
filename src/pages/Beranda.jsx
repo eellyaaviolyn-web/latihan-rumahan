@@ -155,13 +155,14 @@ export default function Beranda() {
 
             {/* CTA */}
             <div className={styles.ctaRow}>
-              <button className={styles.ctaPrimary} onClick={() => navigate('/program')}>
-                Mulai Latihan Gratis
+              <button className={styles.ctaPrimary} onClick={() => navigate('/ai-studio')}>
+                <Zap size={17} />
+                Buka Live AI Studio HUD
                 <ArrowRight size={17} />
               </button>
-              <button className={styles.ctaGhost} onClick={() => navigate('/kalkulator')}>
-                <Activity size={15} />
-                Cek BMI Kamu
+              <button className={styles.ctaGhost} onClick={() => navigate('/program')}>
+                <Dumbbell size={15} />
+                Jelajahi Program
               </button>
             </div>
 
@@ -175,10 +176,10 @@ export default function Beranda() {
                 ))}
               </div>
               <div className={styles.proofText}>
-                <span><strong>50.000+</strong> orang sudah bergabung</span>
+                <span><strong>50.000+</strong> atlet terverifikasi telemetri</span>
                 <div className={styles.stars}>
                   {[...Array(5)].map((_, i) => <Star key={i} size={11} fill="#FBBF24" color="#FBBF24" />)}
-                  <span>4.9</span>
+                  <span>4.9 / 5.0</span>
                 </div>
               </div>
             </div>
@@ -195,7 +196,7 @@ export default function Beranda() {
                 {!heroImgError ? (
                   <img
                     src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&q=85"
-                    alt="Full Body HIIT"
+                    alt="Squat Masterclass HUD"
                     onError={() => setHeroImgError(true)}
                   />
                 ) : (
@@ -217,29 +218,29 @@ export default function Beranda() {
                 <div className={styles.cardBodyTop}>
                   <div>
                     <span className={styles.cardDiff} style={{ color: '#10B981', background: 'rgba(16,185,129,0.12)', borderColor: 'rgba(16,185,129,0.3)' }}>
-                      Beginner
+                      Squat Masterclass
                     </span>
-                    <h3 className={styles.cardTitle}>Full Body HIIT</h3>
+                    <h3 className={styles.cardTitle}>Live AI Studio HUD</h3>
                   </div>
-                  <button className={styles.playBtn} onClick={() => navigate('/detail/1')}>
+                  <button className={styles.playBtn} onClick={() => navigate('/ai-studio')} title="Buka AI Studio">
                     <Play size={16} fill="white" />
                   </button>
                 </div>
                 <div className={styles.cardProgress}>
                   <div className={styles.cardProgressBar}>
-                    <div className={styles.cardProgressFill} style={{ width: '65%' }} />
+                    <div className={styles.cardProgressFill} style={{ width: '88%' }} />
                   </div>
-                  <span className={styles.cardProgressTxt}>65% selesai</span>
+                  <span className={styles.cardProgressTxt}>Target: 88° Parallel Depth Lock</span>
                 </div>
               </div>
             </div>
 
             {/* Floating mini stats around card */}
             <div className={`${styles.floatChip} ${styles.chipTopLeft}`}>
-              <Flame size={14} color="#F97316" /> <span>1.240 kkal hari ini</span>
+              <ShieldCheck size={14} color="#10B981" /> <span>97.8% Akurasi Form AI</span>
             </div>
             <div className={`${styles.floatChip} ${styles.chipBottomRight}`}>
-              <Zap size={14} color="#10B981" /> <span>Streak 7 hari 🔥</span>
+              <Zap size={14} color="#06B6D4" /> <span>Kinetic HUD 60 FPS ⚡</span>
             </div>
           </div>
         </div>

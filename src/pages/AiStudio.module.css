@@ -1,0 +1,746 @@
+/* ══════════════════════════════════════════════════════════
+   KINETIC OBSIDIAN AI STUDIO & HUD STYLING
+══════════════════════════════════════════════════════════ */
+
+.studioContainer {
+  min-height: 100vh;
+  background: #0a0e17;
+  color: #f8fafc;
+  padding: 84px 20px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* ── Top HUD Telemetry Bar ── */
+.hudHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  background: rgba(24, 27, 37, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  padding: 14px 24px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  flex-wrap: wrap;
+}
+
+.hudBrand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.pulseLiveIcon {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 12px #10b981;
+  animation: liveBlink 1.4s ease-in-out infinite;
+}
+
+.hudTitle {
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: 0;
+  color: #f8fafc;
+}
+
+.hudSubtitle {
+  font-size: 0.75rem;
+  color: #06b6d4;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+/* Quick Metrics */
+.hudQuickMetrics {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.quickMetric {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.metricLabel {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: #64748b;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.metricValueEmerald {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #10b981;
+  letter-spacing: -0.02em;
+}
+
+.metricValueCyan {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #06b6d4;
+  letter-spacing: -0.02em;
+}
+
+.metricValueCyan small,
+.metricValueOrange small {
+  font-size: 0.75rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.metricValueWhite {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #f8fafc;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.metricValueOrange {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #f97316;
+  letter-spacing: -0.02em;
+}
+
+/* HUD Action Buttons */
+.hudActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hudBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 16px;
+  border-radius: 99px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.hudBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.btnActive {
+  background: rgba(6, 182, 212, 0.12);
+  border-color: rgba(6, 182, 212, 0.35);
+  color: #06b6d4;
+}
+
+.btnPrimary {
+  background: linear-gradient(135deg, #10b981, #06b6d4);
+  border: none;
+  color: #fff;
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+}
+
+.btnPrimary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 28px rgba(16, 185, 129, 0.6);
+}
+
+/* ── Workspace 3-Column Grid ── */
+.workspaceGrid {
+  display: grid;
+  grid-template-columns: 320px 1fr 340px;
+  gap: 20px;
+  flex: 1;
+}
+
+/* Glass Cards */
+.glassCard {
+  background: rgba(24, 27, 37, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 20px;
+  padding: 20px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.leftColumn, .rightColumn {
+  display: flex;
+  flex-direction: column;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cardHeader h3 {
+  font-size: 0.9rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: #f8fafc;
+  margin: 0;
+}
+
+/* ── Angle Dial ── */
+.angleDialContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.dialRing {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dialSvg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.dialBackdrop {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.06);
+  stroke-width: 10;
+}
+
+.dialProgress {
+  fill: none;
+  stroke-width: 10;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.1s linear, stroke 0.2s ease;
+  filter: drop-shadow(0 0 8px currentColor);
+}
+
+.dialContent {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.dialAngle {
+  font-size: 2.4rem;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.dialTarget {
+  font-size: 0.7rem;
+  color: #64748b;
+  font-weight: 700;
+}
+
+.depthStatusBadge {
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 6px 14px;
+  border-radius: 99px;
+  letter-spacing: 0.02em;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ── 4-Stage Kinetic SOP Sequence ── */
+.phaseList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.phaseItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 14px;
+  transition: all 0.25s ease;
+  position: relative;
+}
+
+.phaseActive {
+  background: rgba(16, 185, 129, 0.08);
+  border-color: rgba(16, 185, 129, 0.35);
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.12);
+}
+
+.phasePassed {
+  opacity: 0.6;
+}
+
+.phaseStepNum {
+  font-size: 0.75rem;
+  font-weight: 900;
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.15);
+  padding: 4px 6px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.phaseInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.phaseHeaderRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.phaseName {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #f8fafc;
+}
+
+.phaseTag {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #06b6d4;
+}
+
+.phaseCue {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.activePillDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+  margin-top: 6px;
+}
+
+/* ── Center Viewfinder ── */
+.centerViewport {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.viewfinderWrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 520px;
+  background: #0f131c;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: 24px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), inset 0 0 40px rgba(16, 185, 129, 0.05);
+}
+
+.videoFeed {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1);
+  z-index: 1;
+}
+
+.videoVisible { display: block; }
+.videoHidden { display: none; }
+
+/* Studio Backdrop */
+.studioBackdrop {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  background: radial-gradient(circle at 50% 60%, rgba(16, 185, 129, 0.08) 0%, rgba(10, 14, 23, 0.95) 75%);
+}
+
+.gridPlane {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 32px 32px;
+  opacity: 0.7;
+}
+
+.centerGlowOrb {
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.12) 0%, transparent 70%);
+  filter: blur(40px);
+  position: absolute;
+}
+
+.cameraOffNotice {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 0 20px;
+  margin-top: 140px;
+}
+
+.cameraOffNotice p {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #f8fafc;
+  margin: 0;
+}
+
+.cameraOffNotice span {
+  font-size: 0.78rem;
+  color: #64748b;
+  max-width: 320px;
+}
+
+/* Skeleton Canvas */
+.skeletonCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* Corner Reticles */
+.reticle {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-color: rgba(6, 182, 212, 0.6);
+  z-index: 4;
+  pointer-events: none;
+}
+.reticleTL { top: 16px; left: 16px; border-top: 2px solid; border-left: 2px solid; }
+.reticleTR { top: 16px; right: 16px; border-top: 2px solid; border-right: 2px solid; }
+.reticleBL { bottom: 16px; left: 16px; border-bottom: 2px solid; border-left: 2px solid; }
+.reticleBR { bottom: 16px; right: 16px; border-bottom: 2px solid; border-right: 2px solid; }
+
+/* Dynamic Floating Cue */
+.floatingCue {
+  position: absolute;
+  top: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: 99px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  z-index: 5;
+  backdrop-filter: blur(16px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  animation: cueSlideDown 0.3s ease;
+}
+
+.floatingCue.success {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  color: #10b981;
+}
+
+.floatingCue.warning {
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  color: #f59e0b;
+}
+
+.floatingCue.info {
+  background: rgba(6, 182, 212, 0.15);
+  border: 1px solid rgba(6, 182, 212, 0.4);
+  color: #06b6d4;
+}
+
+/* Viewfinder Bottom Bar */
+.viewfinderBottomBar {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 5;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.camToggleBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 99px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #f8fafc;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.camToggleBtn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.camActive {
+  background: rgba(16, 185, 129, 0.2);
+  border-color: rgba(16, 185, 129, 0.5);
+  color: #10b981;
+}
+
+.tempoIndicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 99px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.72rem;
+  color: #94a3b8;
+  letter-spacing: 0.05em;
+}
+
+.tempoIndicator strong {
+  color: #f8fafc;
+}
+
+.tempoDot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #64748b;
+}
+
+/* ── Right Column: Muscle EMG & Safety ── */
+.muscleList {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.muscleRow {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.muscleMeta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.muscleName {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #e2e8f0;
+}
+
+.musclePercent {
+  font-size: 0.78rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.muscleTrack {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.muscleFill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.3s ease;
+}
+
+.muscleNote {
+  font-size: 0.65rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+/* Safety Monitor */
+.safetyGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.safetyBox {
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.safetyLabel {
+  font-size: 0.65rem;
+  color: #64748b;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.safetyValEmerald {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #10b981;
+}
+
+.safetySub {
+  font-size: 0.65rem;
+  color: #94a3b8;
+}
+
+.safetyTip {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  background: rgba(6, 182, 212, 0.08);
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.safetyTip p {
+  font-size: 0.72rem;
+  color: #cbd5e1;
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* Finish Session Button */
+.finishSessionBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 20px;
+  background: linear-gradient(135deg, #10b981, #06b6d4);
+  border: none;
+  border-radius: 16px;
+  color: #fff;
+  font-size: 0.92rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.35);
+  transition: transform 0.2s, box-shadow 0.2s;
+  font-family: inherit;
+  margin-top: auto;
+}
+
+.finishSessionBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(16, 185, 129, 0.5);
+}
+
+/* ── Keyframe Animations ── */
+@keyframes liveBlink {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+@keyframes cueSlideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Responsive Adaptations ── */
+@media (max-width: 1200px) {
+  .workspaceGrid {
+    grid-template-columns: 280px 1fr;
+  }
+  .rightColumn {
+    grid-column: span 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 900px) {
+  .studioContainer {
+    padding-top: 76px;
+  }
+  .workspaceGrid {
+    grid-template-columns: 1fr;
+  }
+  .rightColumn {
+    grid-column: span 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .viewfinderWrapper {
+    min-height: 420px;
+  }
+  .hudHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .hudQuickMetrics {
+    width: 100%;
+    justify-content: space-between;
+  }
+}

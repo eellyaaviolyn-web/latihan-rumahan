@@ -13,6 +13,8 @@ import ForgotPassword from './pages/ForgotPassword'
 import Harga from './pages/Harga'
 import Komunitas from './pages/Komunitas'
 import Kalkulator from './pages/Kalkulator'
+import AiStudio from './pages/AiStudio'
+import Profile from './pages/Profile'
 
 function App() {
   return (
@@ -31,6 +33,8 @@ function App() {
           <Route path="/harga" element={<Harga />} />
           <Route path="/komunitas" element={<Komunitas />} />
           <Route path="/kalkulator" element={<Kalkulator />} />
+          <Route path="/ai-studio" element={<AiStudio />} />
+          <Route path="/profil" element={<Profile />} />
         </Routes>
       </div>
       <Footer />

@@ -67,7 +67,9 @@
   justify-content: center;
 }
 .link {
-  display: block;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   padding: 7px 13px;
   border-radius: 99px;
   font-size: 0.85rem;
@@ -84,6 +86,15 @@
 .link:hover { color: #fff; background: rgba(255,255,255,0.06); }
 .linkActive  { color: #fff !important; background: rgba(255,255,255,0.08) !important; }
 
+.liveNavDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+  animation: pulse 1.6s ease-in-out infinite;
+}
+
 /* separator between links on desktop */
 .links li + li::before {
   content: '·';
@@ -91,6 +102,14 @@
   margin-right: 2px;
   font-size: 0.7rem;
   pointer-events: none;
+}
+
+.userProfileLink {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: inherit;
 }
 
 /* ── Right actions ── */

@@ -191,9 +191,9 @@
   transition: all 0.2s;
 }
 .genderActive {
-  background: rgba(255,85,0,0.15);
-  border-color: rgba(255,85,0,0.4);
-  color: #FF5500;
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.4);
+  color: #10b981;
 }
 
 /* Goal */
@@ -212,15 +212,35 @@
   white-space: nowrap;
 }
 .goalActive {
-  background: rgba(255,85,0,0.15);
-  border-color: rgba(255,85,0,0.4);
-  color: #FF5500;
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.4);
+  color: #10b981;
+}
+
+.cardHeaderBox {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+
+.engineBadge {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #06b6d4;
+  background: rgba(6, 182, 212, 0.12);
+  border: 1px solid rgba(6, 182, 212, 0.25);
+  padding: 3px 10px;
+  border-radius: 99px;
+  letter-spacing: 0.04em;
 }
 
 /* Calc Button */
 .calcBtn {
   padding: 15px;
-  background: linear-gradient(135deg, #FF5500, #FF2A00);
+  background: linear-gradient(135deg, #10b981, #06b6d4);
   border: none;
   border-radius: 14px;
   color: #fff;
@@ -228,10 +248,11 @@
   font-weight: 800;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
-  box-shadow: 0 6px 24px rgba(255,85,0,0.3);
+  box-shadow: 0 6px 24px rgba(16, 185, 129, 0.35);
   margin-top: 4px;
+  font-family: inherit;
 }
-.calcBtn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(255,85,0,0.4); }
+.calcBtn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(16, 185, 129, 0.5); }
 
 /* Results */
 .result {
@@ -288,8 +309,8 @@
   gap: 4px;
 }
 .bmiTips {
-  background: rgba(255,85,0,0.06);
-  border: 1px solid rgba(255,85,0,0.15);
+  background: rgba(16, 185, 129, 0.06);
+  border: 1px solid rgba(16, 185, 129, 0.15);
   border-radius: 12px;
   padding: 14px 16px;
 }
@@ -305,7 +326,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 .tdeeBox {
   background: rgba(255,255,255,0.04);
@@ -318,20 +339,148 @@
   gap: 4px;
 }
 .tdeeTarget {
-  background: rgba(255,85,0,0.08);
-  border-color: rgba(255,85,0,0.2);
+  background: rgba(16, 185, 129, 0.08);
+  border-color: rgba(16, 185, 129, 0.25);
 }
 .tdeeLabel { font-size: 0.78rem; font-weight: 700; color: #64748B; text-transform: uppercase; letter-spacing: 0.05em; }
-.tdeeNum { font-size: 2.2rem; font-weight: 900; color: #FF5500; letter-spacing: -0.04em; }
+.tdeeNum { font-size: 2.2rem; font-weight: 900; color: #10b981; letter-spacing: -0.04em; }
 .tdeeUnit { font-size: 0.78rem; color: #64748B; font-weight: 600; }
+
+/* Macro Nutrition Cards (PRD 4.4) */
+.macroHeading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #f8fafc;
+  margin: 0 0 16px;
+}
+
+.macroCardsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.macroCard {
+  background: rgba(24, 27, 37, 0.7);
+  border: 1px solid;
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.macroTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.macroType {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #64748b;
+  letter-spacing: 0.06em;
+}
+
+.macroPctBadge {
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 99px;
+}
+
+.macroGrams {
+  font-size: 1.8rem;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.macroGrams sub {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.macroCal {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  line-height: 1.35;
+}
+
+/* Program Match Box */
+.programMatchBox {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  border-radius: 16px;
+  padding: 18px 22px;
+  flex-wrap: wrap;
+}
+
+.matchLeft {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 1;
+}
+
+.matchLeft h4 {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #f8fafc;
+  margin: 0 0 2px;
+}
+
+.matchLeft p {
+  font-size: 0.82rem;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.matchCtaBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #10b981, #06b6d4);
+  border: none;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 0.88rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.35);
+  transition: transform 0.2s;
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+.matchCtaBtn:hover {
+  transform: translateY(-2px);
+}
 
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
+@media (max-width: 768px) {
+  .macroCardsGrid { grid-template-columns: 1fr; }
+  .tdeeGrid { grid-template-columns: 1fr; }
+  .programMatchBox { flex-direction: column; align-items: flex-start; }
+}
+
 @media (max-width: 640px) {
   .card { padding: 24px 18px; }
-  .tdeeGrid { grid-template-columns: 1fr; }
   .bmiScale { display: none; }
 }
+

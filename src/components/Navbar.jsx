@@ -5,10 +5,12 @@ import styles from './Navbar.module.css';
 
 const LINKS = [
   { to: '/',           label: 'Home'       },
+  { to: '/ai-studio',  label: 'Studio AI', isLive: true },
   { to: '/program',    label: 'Programs'   },
   { to: '/kalkulator', label: 'Calculator' },
   { to: '/komunitas',  label: 'Community'  },
   { to: '/harga',      label: 'Pricing'    },
+  { to: '/profil',     label: 'Trophy'     },
 ];
 
 export default function Navbar() {
@@ -53,7 +55,7 @@ export default function Navbar() {
 
         {/* ── Center Links (desktop) ── */}
         <ul className={`${styles.links} ${open ? styles.linksOpen : ''}`}>
-          {LINKS.map(({ to, label }) => (
+          {LINKS.map(({ to, label, isLive }) => (
             <li key={label}>
               <NavLink
                 to={to}
@@ -62,6 +64,7 @@ export default function Navbar() {
                   isActive ? `${styles.link} ${styles.linkActive}` : styles.link
                 }
                 onClick={close}>
+                {isLive && <span className={styles.liveNavDot} />}
                 {label}
               </NavLink>
             </li>
@@ -78,6 +81,7 @@ export default function Navbar() {
           {user && (
             <>
               <li className={styles.mobileDivider} />
+              <li><Link to="/profil" className={styles.link} onClick={close}>Profil & Trophy Vault</Link></li>
               <li>
                 <button onClick={() => { handleLogout(); close(); }} className={`${styles.link} ${styles.mobileLogout}`}>
                   Keluar dari akun
@@ -91,12 +95,14 @@ export default function Navbar() {
         <div className={styles.actions}>
           {user ? (
             <div className={styles.userRow}>
-              <div className={styles.avatar}>
-                {user.picture
-                  ? <img src={user.picture} alt={user.name} referrerPolicy="no-referrer" />
-                  : <span>{user.name?.charAt(0) || 'U'}</span>}
-              </div>
-              <span className={styles.userName}>{user.name?.split(' ')[0]}</span>
+              <Link to="/profil" className={styles.userProfileLink} title="Buka Profil & Trophy Vault">
+                <div className={styles.avatar}>
+                  {user.picture
+                    ? <img src={user.picture} alt={user.name} referrerPolicy="no-referrer" />
+                    : <span>{user.name?.charAt(0) || 'U'}</span>}
+                </div>
+                <span className={styles.userName}>{user.name?.split(' ')[0]}</span>
+              </Link>
               <button onClick={handleLogout} className={styles.logoutBtn} title="Keluar">
                 <LogOut size={15} />
               </button>
@@ -104,7 +110,7 @@ export default function Navbar() {
           ) : (
             <>
               <Link to="/login" className={styles.loginLink}>Login</Link>
-              <Link to="/register" className={styles.ctaBtn}>Mulai Latihan</Link>
+              <Link to="/ai-studio" className={styles.ctaBtn}>Mulai Studio AI</Link>
             </>
           )}
         </div>
