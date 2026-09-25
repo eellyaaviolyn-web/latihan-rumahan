@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  MessageSquare, Users, Award, Heart, ThumbsUp, Flame,
-  ShieldCheck, Zap, ArrowRight, Trophy, Sparkles, Filter
+  Users, ThumbsUp, Flame,
+  ShieldCheck, Zap, Trophy
 } from 'lucide-react';
 import styles from './Komunitas.module.css';
 

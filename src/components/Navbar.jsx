@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { Zap, Menu, X, LogOut } from 'lucide-react';
 import styles from './Navbar.module.css';
 
@@ -17,8 +17,6 @@ export default function Navbar() {
   const [open, setOpen]   = useState(false);
   const [user, setUser]   = useState(null);
   const [scrolled, setScrolled] = useState(false);
-  const navigate  = useNavigate();
-  const location  = useLocation();
   const close = () => setOpen(false);
 
   useEffect(() => {

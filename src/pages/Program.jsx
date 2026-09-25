@@ -250,8 +250,12 @@ export default function Program() {
                 <div className={styles.resultCardBox}>
                   <span className={styles.resultEmoji}>{matchedProgram?.emoji || '🔥'}</span>
                   <div>
-                    <strong>{matchedProgram?.nama}</strong>
-                    <p>{matchedProgram?.level} • {matchedProgram?.durasi} Menit • {matchedProgram?.kalori} kcal</p>
+                    <strong>{matchedProgram?.nama || 'Push Up'}</strong>
+                    <p>
+                      {matchedProgram?.level} &nbsp;•&nbsp;
+                      {matchedProgram?.durasi} &nbsp;•&nbsp;
+                      {matchedProgram?.kalori} kcal
+                    </p>
                   </div>
                 </div>
 

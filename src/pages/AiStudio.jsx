@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  Camera, CameraOff, Play, Pause, RotateCcw, Volume2, VolumeX,
-  Zap, Award, Activity, ShieldCheck, Flame, ChevronRight,
-  Sparkles, CheckCircle2, AlertTriangle, Eye, Info
+  Camera, CameraOff, Play, Pause, Volume2, VolumeX,
+  Zap, Activity, ShieldCheck, Flame, ChevronRight,
+  Sparkles, CheckCircle2, AlertTriangle, Info
 } from 'lucide-react';
 import { useToast } from '../components/Toast';
 import styles from './AiStudio.module.css';

@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
-  ShieldCheck, Zap, Award, Flame, Activity, Clock,
-  Calendar, CheckCircle2, ChevronRight, Share2, Sparkles,
-  TrendingUp, User, Lock, ExternalLink
+  ShieldCheck, Zap, Flame, Activity, Clock,
+  CheckCircle2, ChevronRight, Share2, Sparkles, Lock
 } from 'lucide-react';
 import { useToast } from '../components/Toast';
 import styles from './Profile.module.css';
@@ -93,12 +92,19 @@ const RECENT_SESSIONS = [
 export default function Profile() {
   const navigate = useNavigate();
   const toast = useToast();
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
+  const [user, setUser] = useState(() => {
     const s = localStorage.getItem('fitlife_user');
-    if (s) setUser(JSON.parse(s));
-    else setUser({ name: 'Alex Pradipta', email: 'alex.athlete@fitlife.id' });
+    return s ? JSON.parse(s) : { name: 'Alex Pradipta', email: 'alex.athlete@fitlife.id' };
+  });
+
+  // Sinkronisasi jika localStorage berubah (misalnya login/logout di tab lain)
+  useEffect(() => {
+    const onStorage = () => {
+      const s = localStorage.getItem('fitlife_user');
+      if (s) setUser(JSON.parse(s));
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
   }, []);
 
   const handleShare = () => {
